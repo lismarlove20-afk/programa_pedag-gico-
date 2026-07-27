@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bitácora de Estudio · Matemáticas 8° · Saber ICFES</title>
+<meta name="description" content="Programa interactivo de 4 semanas: Lenguaje algebraico y Congruencia de triángulos, para grado octavo, preparación Pruebas Saber.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   TOKENS
+========================================================= */
+:root{
+  --ink:#16233A;
+  --blueprint:#1F4E79;
+  --blueprint-deep:#0F3358;
+  --blueprint-tint:#E7EFF6;
+  --paper:#FAFAF7;
+  --paper-line:rgba(31,78,121,0.09);
+  --mustard:#E8A33D;
+  --mustard-deep:#C9821E;
+  --brick:#C1483D;
+  --leaf:#3E7C59;
+  --leaf-tint:#E7F3EC;
+  --brick-tint:#FBEAE8;
+  --graphite:#525866;
+  --line:#D9DEE6;
+  --font-display:'Space Grotesk', sans-serif;
+  --font-body:'IBM Plex Sans', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+  --radius:10px;
+  --shadow: 0 1px 2px rgba(15,51,88,.06), 0 8px 24px -12px rgba(15,51,88,.18);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  color:var(--ink);
+  background:
+    linear-gradient(var(--paper-line) 1px, transparent 1px) 0 0/100% 28px,
+    linear-gradient(90deg, var(--paper-line) 1px, transparent 1px) 0 0/28px 100%,
+    var(--paper);
+  min-height:100vh;
+}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  html{scroll-behavior:auto;}
+}
+a{color:var(--blueprint);}
+h1,h2,h3,h4{font-family:var(--font-display); margin:0; color:var(--blueprint-deep); letter-spacing:-0.01em;}
+p{margin:0 0 .7em 0; line-height:1.6;}
+.mono{font-family:var(--font-mono);}
+.wrap{max-width:980px; margin:0 auto; padding:0 24px;}
+button{font:inherit;}
+:focus-visible{outline:3px solid var(--mustard); outline-offset:2px;}
+
+/* =========================================================
+   HEADER / SIGNATURE
+========================================================= */
+header.site{
+  background:
+    radial-gradient(1200px 320px at 15% -20%, rgba(255,255,255,.06), transparent),
+    linear-gradient(155deg, var(--blueprint-deep) 0%, var(--blueprint) 65%, #2C6699 100%);
+  color:#EAF1F8;
+  position:relative;
+  overflow:hidden;
+  border-bottom:4px solid var(--mustard);
+}
+header.site::before{
+  content:"";
+  position:absolute; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size:36px 36px;
+  pointer-events:none;
+}
+.hero{
+  position:relative;
+  padding:44px 0 30px 0;
+  display:flex;
+  align-items:center;
+  gap:22px;
+  flex-wrap:wrap;
+}
+.hero .mark{flex:0 0 auto;}
+.hero .titles{flex:1 1 320px; min-width:260px;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:var(--font-mono); font-size:11.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:#CFE0F0; border:1px solid rgba(255,255,255,.35); border-radius:20px;
+  padding:4px 12px 4px 10px; margin-bottom:14px;
+}
+.eyebrow .dot{width:6px; height:6px; border-radius:50%; background:var(--mustard);}
+h1.h1{font-size:clamp(26px, 4.4vw, 38px); color:#fff; line-height:1.15;}
+h1.h1 em{font-style:normal; color:var(--mustard);}
+.hero p.sub{color:#D7E4F1; max-width:56ch; font-size:15px; margin-top:10px;}
+
+/* Dimension-line progress bar (signature element) */
+.dim-progress{
+  position:relative;
+  margin:26px 0 4px 0;
+  padding-top:14px;
+}
+.dim-progress .track{
+  position:relative; height:2px; background:rgba(255,255,255,.35);
+}
+.dim-progress .track::before, .dim-progress .track::after{
+  content:""; position:absolute; top:-4px; width:2px; height:10px; background:rgba(255,255,255,.55);
+}
+.dim-progress .track::before{left:0;}
+.dim-progress .track::after{right:0;}
+.dim-progress .fill{
+  position:absolute; top:0; left:0; height:2px; background:var(--mustard);
+  transition:width .5s ease;
+}
+.dim-progress .fill::after{
+  content:""; position:absolute; right:-1px; top:-4px; width:2px; height:10px; background:var(--mustard);
+}
+.dim-progress .ticks{
+  display:flex; justify-content:space-between;
+  font-family:var(--font-mono); font-size:10.5px; color:#BBD0E4; margin-top:6px;
+}
+.dim-progress .label-row{
+  display:flex; justify-content:space-between; align-items:baseline; font-family:var(--font-mono); font-size:11.5px; color:#CFE0F0; margin-bottom:2px;
+}
+.dim-progress .label-row b{color:#fff; font-size:15px;}
+
+/* =========================================================
+   NAV — RULER TABS (top level, per week)
+========================================================= */
+nav.weeknav{
+  position:sticky; top:0; z-index:30;
+  background:var(--blueprint-deep);
+  border-bottom:1px solid rgba(255,255,255,.12);
+}
+.weeknav .wrap{display:flex; overflow-x:auto; scrollbar-width:thin;}
+.weektab{
+  flex:1 1 0;
+  min-width:150px;
+  background:transparent;
+  border:none;
+  color:#B9CBDD;
+  cursor:pointer;
+  padding:14px 12px 12px 12px;
+  text-align:left;
+  border-right:1px solid rgba(255,255,255,.08);
+  position:relative;
+  transition:background .2s ease, color .2s ease;
+}
+.weektab:last-child{border-right:none;}
+.weektab:hover{background:rgba(255,255,255,.05); color:#fff;}
+.weektab .num{
+  font-family:var(--font-mono); font-size:11px; opacity:.85; display:block; margin-bottom:3px;
+}
+.weektab .ttl{font-family:var(--font-display); font-weight:600; font-size:13.5px; color:inherit; display:block;}
+.weektab .icon{position:absolute; right:10px; top:12px; opacity:.55;}
+.weektab[aria-selected="true"]{background:var(--paper); color:var(--blueprint-deep);}
+.weektab[aria-selected="true"] .ttl{color:var(--blueprint-deep);}
+.weektab[aria-selected="true"]::after{
+  content:""; position:absolute; left:0; right:0; bottom:-1px; height:3px; background:var(--mustard);
+}
+.weektab .chip{
+  font-family:var(--font-mono); font-size:9.5px; margin-top:6px; display:inline-block;
+  padding:1px 7px; border-radius:20px; border:1px solid currentColor; opacity:.75;
+}
+
+/* =========================================================
+   PANELS
+========================================================= */
+main{padding:34px 0 70px 0;}
+.panel{display:none;}
+.panel.active{display:block; animation:fadeUp .35s ease;}
+@keyframes fadeUp{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+.panel-head{
+  display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:14px;
+  margin-bottom:18px; padding-bottom:16px; border-bottom:1px solid var(--line);
+}
+.panel-head h2{font-size:23px;}
+.panel-head .theme{font-family:var(--font-mono); color:var(--graphite); font-size:12.5px; margin-top:5px;}
+.week-progress-pill{
+  font-family:var(--font-mono); font-size:11.5px; color:var(--blueprint-deep);
+  background:var(--blueprint-tint); border:1px solid #C9DAEA; border-radius:20px; padding:5px 12px;
+  white-space:nowrap;
+}
+
+.goal-strip{
+  background:#FFF7E8; border:1px solid #F0D29A; border-left:4px solid var(--mustard-deep);
+  border-radius:8px; padding:12px 16px; margin-bottom:22px; font-size:14px;
+}
+.goal-strip b{color:var(--mustard-deep);}
+
+/* Sub-tabs (inner, per section) */
+.subnav{
+  display:flex; gap:4px; margin-bottom:20px; border-bottom:2px solid var(--line); flex-wrap:wrap;
+}
+.subtab{
+  background:none; border:none; cursor:pointer;
+  padding:9px 16px; font-family:var(--font-display); font-weight:600; font-size:13.5px;
+  color:var(--graphite); border-radius:8px 8px 0 0; position:relative; top:2px;
+  display:flex; align-items:center; gap:7px;
+}
+.subtab .count{
+  font-family:var(--font-mono); font-size:10px; background:var(--blueprint-tint); color:var(--blueprint);
+  border-radius:20px; padding:1px 7px;
+}
+.subtab[aria-selected="true"]{color:var(--blueprint-deep); border-bottom:2px solid var(--blueprint-deep);}
+.subtab:hover{color:var(--blueprint-deep);}
+.subpanel{display:none;}
+.subpanel.active{display:block; animation:fadeUp .3s ease;}
+
+/* Content blocks */
+.block{
+  border-radius:var(--radius); padding:16px 18px; margin-bottom:16px; box-shadow:var(--shadow);
+}
+.block.concept{background:#fff; border-left:4px solid var(--blueprint);}
+.block.example{background:#fff; border-left:4px solid var(--mustard-deep);}
+.block h4{font-size:14.5px; color:var(--blueprint-deep); margin-bottom:8px;}
+.formula{
+  text-align:center; font-family:var(--font-mono); font-size:15px; color:var(--blueprint-deep);
+  background:var(--blueprint-tint); border-radius:6px; padding:9px; margin:10px 0; letter-spacing:.02em;
+}
+.figs{display:flex; gap:22px; justify-content:center; flex-wrap:wrap; margin:8px 0 4px 0;}
+.figs figure{margin:0; text-align:center;}
+.figs figcaption{font-family:var(--font-mono); font-size:10.5px; color:var(--graphite); margin-top:2px;}
+
+.tags{display:flex; gap:6px; margin-bottom:8px; flex-wrap:wrap;}
+.tag{
+  font-family:var(--font-mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.05em;
+  padding:3px 9px; border-radius:20px; color:#fff;
+}
+.tag.com{background:var(--leaf);}
+.tag.raz{background:var(--mustard-deep);}
+.tag.mod{background:var(--blueprint);}
+
+/* Exercises */
+.exercise{
+  background:#fff; border:1px solid var(--line); border-radius:var(--radius);
+  padding:14px 16px; margin-bottom:12px; display:flex; gap:12px; align-items:flex-start;
+  transition:border-color .2s ease, background .2s ease;
+}
+.exercise.done{background:var(--leaf-tint); border-color:#BFDDCB;}
+.exercise input[type=checkbox]{
+  width:20px; height:20px; margin-top:2px; accent-color:var(--leaf); cursor:pointer; flex:0 0 auto;
+}
+.exercise .ex-body{flex:1 1 auto;}
+.exercise .ex-text{font-size:14.5px;}
+.exercise .ex-text b.ex-num{font-family:var(--font-mono); color:var(--blueprint); margin-right:6px;}
+.hint{margin-top:6px;}
+.hint summary{
+  cursor:pointer; font-family:var(--font-mono); font-size:11.5px; color:var(--mustard-deep); list-style:none;
+  display:inline-flex; align-items:center; gap:5px;
+}
+.hint summary::-webkit-details-marker{display:none;}
+.hint summary::before{content:"💡"; }
+.hint[open] summary::before{content:"💡";}
+.hint p{
+  margin:6px 0 0 0; font-size:13px; color:var(--graphite); background:#FFF7E8; border-radius:6px; padding:8px 10px;
+}
+.hint.solution summary{color:var(--blueprint);}
+.hint.solution summary::before{content:"✅ ";}
+.hint.solution p{background:var(--blueprint-tint); color:var(--ink);}
+
+/* ICFES quiz */
+.icfes{
+  background:#fff; border:1.5px dashed #A9A2D8; border-radius:var(--radius);
+  padding:16px 18px; margin-bottom:18px;
+}
+.icfes-head{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+.icfes-badge{
+  font-family:var(--font-mono); font-size:10.5px; background:#4B3F9E; color:#fff; padding:3px 10px; border-radius:5px; letter-spacing:.04em;
+}
+.icfes .stem{font-weight:600; font-size:14.5px; margin-bottom:10px;}
+.opt-list{display:grid; gap:8px; margin-bottom:4px;}
+.opt{
+  text-align:left; background:#fff; border:1.5px solid var(--line); border-radius:8px;
+  padding:9px 12px; cursor:pointer; font-size:13.8px; display:flex; gap:10px; align-items:flex-start;
+  transition:border-color .15s ease, background .15s ease;
+}
+.opt .letter{
+  font-family:var(--font-mono); font-weight:600; color:var(--blueprint); flex:0 0 auto;
+}
+.opt:hover{border-color:var(--blueprint);}
+.opt.correct{background:var(--leaf-tint); border-color:var(--leaf);}
+.opt.incorrect{background:var(--brick-tint); border-color:var(--brick);}
+.opt[disabled]{cursor:default;}
+.opt.correct .letter{color:var(--leaf);}
+.opt.incorrect .letter{color:var(--brick);}
+.justification{
+  margin-top:12px; background:var(--blueprint-tint); border-left:3px solid var(--blueprint);
+  border-radius:6px; padding:10px 13px; font-size:13.3px; display:none;
+}
+.justification.show{display:block; animation:fadeUp .3s ease;}
+.justification b{color:var(--blueprint-deep);}
+.icfes-status{
+  font-family:var(--font-mono); font-size:11px; margin-top:8px; color:var(--graphite);
+}
+
+/* Overview (Inicio) */
+.crono-table{width:100%; border-collapse:collapse; font-size:13.5px; margin:14px 0 10px 0;}
+.crono-table th{background:var(--blueprint-deep); color:#fff; text-align:left; padding:9px 12px; font-family:var(--font-display); font-weight:600; font-size:12.5px;}
+.crono-table td{border-bottom:1px solid var(--line); padding:10px 12px; vertical-align:top;}
+.crono-table tr:nth-child(even) td{background:#F5F7FA;}
+.crono-table .wk{font-family:var(--font-mono); color:var(--blueprint); font-weight:600;}
+
+.cards2{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0;}
+@media (max-width:640px){.cards2{grid-template-columns:1fr;}}
+.axis-card{
+  background:#fff; border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow); border-top:4px solid var(--mustard);
+}
+.axis-card.geo{border-top-color:var(--blueprint);}
+.axis-card h3{font-size:15px; margin-bottom:6px;}
+.axis-card p{font-size:13.5px; color:var(--graphite); margin:0;}
+
+.finaltips{
+  background:var(--brick-tint); border:1.5px solid #E7B9B4; border-radius:var(--radius);
+  padding:16px 18px; margin-top:8px;
+}
+.finaltips h4{color:var(--brick); margin-bottom:8px;}
+.finaltips ul{margin:0; padding-left:20px;}
+.finaltips li{margin-bottom:6px; font-size:13.8px;}
+
+footer.site{
+  border-top:1px solid var(--line); padding:22px 0 40px 0; text-align:center;
+  color:var(--graphite); font-family:var(--font-mono); font-size:11.5px;
+}
+footer.site a{color:var(--blueprint);}
+
+/* Reset button */
+.reset-btn{
+  font-family:var(--font-mono); font-size:11px; background:none; border:1px solid var(--line);
+  color:var(--graphite); border-radius:20px; padding:5px 12px; cursor:pointer;
+}
+.reset-btn:hover{border-color:var(--brick); color:var(--brick);}
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap hero">
+    <div class="mark" aria-hidden="true">
+      <svg width="66" height="66" viewBox="0 0 66 66" fill="none">
+        <circle cx="33" cy="33" r="31" stroke="#E8A33D" stroke-width="1.5" stroke-dasharray="3 4"/>
+        <polygon points="33,14 50,48 16,48" fill="none" stroke="#EAF1F8" stroke-width="2.2"/>
+        <line x1="33" y1="14" x2="33" y2="48" stroke="#E8A33D" stroke-width="1.2" stroke-dasharray="2 3"/>
+        <text x="33" y="59" text-anchor="middle" font-family="IBM Plex Mono" font-size="7" fill="#CFE0F0">x²+y</text>
+      </svg>
+    </div>
+    <div class="titles">
+      <span class="eyebrow"><span class="dot"></span> Bitácora interactiva · Grado 8°</span>
+      <h1 class="h1">Preparación <em>Saber</em> — Matemáticas</h1>
+      <p class="sub">Congruencia de triángulos y lenguaje algebraico, en cuatro semanas de trabajo. Marca lo que vas resolviendo: tu avance se guarda en este mismo navegador.</p>
+    </div>
+  </div>
+  <div class="wrap dim-progress">
+    <div class="label-row"><span>AVANCE GENERAL</span><b id="overallPct">0%</b></div>
+    <div class="track"><div class="fill" id="overallFill" style="width:0%"></div></div>
+    <div class="ticks"><span>0</span><span>25</span><span>50</span><span>75</span><span>100</span></div>
+  </div>
+</header>
+
+<nav class="weeknav" role="tablist" aria-label="Navegación por semana" id="weekNav"></nav>
+
+<main class="wrap" id="mainContent"></main>
+
+<footer class="site">
+  <div class="wrap">
+    Programa de estudio autogenerado para preparación Pruebas Saber (ICFES) · Matemáticas · Grado octavo — Colombia<br>
+    Tu progreso se guarda localmente en este navegador (localStorage). <button class="reset-btn" id="resetProgress" type="button">Reiniciar avance</button>
+  </div>
+</footer>
+
+<script>
+/* =========================================================
+   DATA
+========================================================= */
+const WEEKS = [
+{
+  id:"s1", num:"01", navLabel:"SEMANA 01", isWeek:true, title:"Semana 1", theme:"Lenguaje algebraico I · Traducción", axis:"alg",
+  objective:"Traducir situaciones cotidianas a expresiones algebraicas, e interpretar expresiones algebraicas en lenguaje natural.",
+  concepts:[
+    {h:"¿Qué es el lenguaje algebraico?", body:"<p>El <b>lenguaje algebraico</b> representa cantidades y relaciones usando letras (<i>variables</i>), números y operaciones. Una variable representa un valor que puede cambiar o que aún no conocemos.</p>"},
+    {h:"Expresiones, términos y coeficientes", body:"<p>Una <b>expresión algebraica</b> combina variables, números y operaciones sin signo de igualdad: por ejemplo, <span class='mono'>3x + 5</span>. Cada parte separada por + o − es un <b>término</b>; en <span class='mono'>3x</span>, el 3 es el <b>coeficiente</b> y x la variable.</p>"},
+    {h:"Palabras clave para traducir", body:"<p>«El doble de» → 2x &nbsp;·&nbsp; «la suma de» → + &nbsp;·&nbsp; «un número menos 4» → x − 4 &nbsp;·&nbsp; «el triple de un número aumentado en 7» → 3x + 7. Reconocer estas frases es la base de toda modelación algebraica.</p>"}
+  ],
+  examples:[
+    {h:"Plan de datos móviles", body:"<p>Una operadora cobra $15.000 fijos al mes más $800 por cada GB consumido. Si <i>x</i> son los GB usados:</p><div class='formula'>Costo total = 800x + 15.000</div><p>Con 6 GB: 800(6)+15.000 = $19.800. La misma estructura «tarifa fija + valor variable» aparece en recibos de agua, luz, taxis y gimnasios.</p>"},
+    {h:"Área de un jardín rectangular", body:"<p>El largo de un jardín mide el doble del ancho más 2 metros. Si el ancho es <i>x</i>, el largo es 2x+2, y el área es:</p><div class='formula'>Área = x(2x + 2)</div><p>Esta expresión permite calcular el área para cualquier ancho, sin medir cada vez desde cero.</p>"}
+  ],
+  exercises:[
+    {t:"Traduce a lenguaje algebraico: «una boleta de cine cuesta $12.000 y cada crispeta adicional cuesta $6.000». Si compras <i>n</i> crispetas, ¿cuál es el costo total?", tags:["com"], hint:"El valor fijo se suma una sola vez; el valor variable se multiplica por n."},
+    {t:"Interpreta en palabras la expresión <span class='mono'>5x − 3</span>, donde x es el número de entradas vendidas en una rifa escolar.", tags:["com"], hint:"Piensa qué representa el 5, qué representa la x, y qué hace el −3."},
+    {t:"Una bicicleta eléctrica cobra $2.000 por minuto de uso más $3.000 fijos por desbloquearla. Escribe la expresión para el costo total según los minutos <i>m</i>.", tags:["mod"], hint:"¿Cuál valor no cambia y cuál depende de m?"},
+    {t:"Escribe la expresión algebraica de «el cuádruple de un número, disminuido en 9».", tags:["com"], hint:"Cuádruple significa multiplicar por 4."},
+    {t:"En la expresión <span class='mono'>7a + 2b − 10</span>, identifica cuántos términos hay y cuál es el coeficiente de cada variable.", tags:["raz"], hint:"Cuenta los signos + y − que separan las partes."},
+    {t:"Un taxi cobra una banderazo de $4.200 más $1.100 por cada 100 metros recorridos (<i>d</i>). Plantea la expresión del costo total y calcula cuánto costaría un recorrido de 35 tramos de 100 m.", tags:["mod","raz"], hint:"Primero escribe la expresión general, luego reemplaza d = 35."}
+  ],
+  icfes:[
+    {stem:"Un domiciliario cobra $2.500 por el servicio, más $1.200 por cada kilómetro recorrido. Si <i>k</i> representa los kilómetros, ¿cuál expresión representa el costo total?",
+     options:["2.500 + 1.200 + k","1.200k + 2.500","2.500k + 1.200","(2.500 + 1.200)k"], correct:1,
+     just:"El valor fijo ($2.500) no depende de los kilómetros, así que se suma aparte; el costo variable es $1.200 por cada km, es decir 1.200k. La opción C invierte los papeles del valor fijo y el variable."},
+    {stem:"La expresión algebraica del perímetro de un terreno rectangular cuyo largo es el triple del ancho <i>a</i> es:",
+     options:["3a + a","2(3a) + 2a","3a × a","4a + 3"], correct:1,
+     just:"El perímetro es 2(largo)+2(ancho). Con largo 3a y ancho a: 2(3a)+2a = 8a. La opción C corresponde al área, no al perímetro."},
+    {stem:"Una papelería vende cuadernos a $3.500 cada uno y ofrece $500 de descuento total si se compran 5 o más. ¿Cuál expresión representa el costo de comprar <i>n</i> cuadernos (n ≥ 5)?",
+     options:["3.500n","3.500n − 500","3.500(n − 500)","(3.500 − 500)n"], correct:1,
+     just:"El descuento es un valor fijo que se resta una sola vez del total, no por cada cuaderno; por eso es 3.500n − 500 y no (3.500−500)n."}
+  ]
+},
+{
+  id:"s2", num:"02", navLabel:"SEMANA 02", isWeek:true, title:"Semana 2", theme:"Lenguaje algebraico II · Ecuaciones", axis:"alg",
+  objective:"Plantear ecuaciones sencillas a partir de situaciones reales y resolverlas para encontrar el valor de la incógnita.",
+  concepts:[
+    {h:"¿Qué es una ecuación?", body:"<p>Una <b>ecuación</b> es una igualdad entre dos expresiones que contiene una o más incógnitas. Resolverla es encontrar el valor que hace verdadera esa igualdad.</p>"},
+    {h:"Operaciones inversas", body:"<p>Para resolver ecuaciones de primer grado aplicamos operaciones inversas a ambos lados: lo que se hace a un lado, se hace al otro. En <span class='mono'>3x + 4 = 19</span>: restamos 4 (3x=15) y dividimos entre 3 (x=5).</p>"},
+    {h:"Modelar una situación", body:"<p><b>Modelar</b> es transformar una situación en una ecuación fiel: identificar la incógnita, las cantidades conocidas y la relación de igualdad que las conecta.</p>"}
+  ],
+  examples:[
+    {h:"Consumo de agua en el hogar", body:"<p>Tarifa fija de $8.000 más $450 por m³. El recibo fue de $22.400. ¿Cuántos m³ consumieron?</p><div class='formula'>450x + 8.000 = 22.400</div><p>450x = 14.400 → x = 32 m³. El ICFES exige primero <i>plantear</i> bien la ecuación, no solo calcular.</p>"},
+    {h:"Reparto proporcional", body:"<p>Dos hermanos se reparten $840.000; uno trabajó el doble de horas que el otro. Si x es lo que recibe el que trabajó menos:</p><div class='formula'>x + 2x = 840.000</div><p>3x = 840.000 → x = $280.000 (el otro recibe $560.000).</p>"}
+  ],
+  exercises:[
+    {t:"Un parqueadero cobra $3.000 la primera hora y $1.500 por cada hora adicional. Camila pagó $10.500. Plantea la ecuación y halla las horas adicionales.", tags:["mod"], hint:"La primera hora ya está incluida en el valor fijo de $3.000."},
+    {t:"La suma de las edades de dos primas es 34 años; una tiene 6 años más que la otra. Plantea la ecuación y halla ambas edades.", tags:["mod","raz"], hint:"Si x es la edad menor, la otra es x+6."},
+    {t:"Explica con tus palabras qué significa «despejar la incógnita» y por qué debe mantenerse la igualdad al resolver.", tags:["com"], hint:"Piensa en una balanza: si quitas algo de un lado, debes quitarlo también del otro."},
+    {t:"Un plan de gimnasio cuesta $60.000 de matrícula más $35.000 mensuales. Si en total una persona pagó $340.000, ¿cuántos meses estuvo inscrita?", tags:["mod"], hint:"La matrícula se paga una sola vez, no cada mes."},
+    {t:"Resuelve: <span class='mono'>2(x − 3) = 16</span>, y verifica tu resultado reemplazando el valor hallado.", tags:["raz"], hint:"Primero puedes distribuir el 2, o dividir ambos lados entre 2."},
+    {t:"Una frutera compró cierta cantidad de mangos a $900 cada uno y pagó $2.000 de transporte; en total gastó $23.600. Plantea y resuelve la ecuación para hallar cuántos mangos compró.", tags:["mod","raz"], hint:"El transporte es un valor fijo, aparte del costo por mango."}
+  ],
+  icfes:[
+    {stem:"Tres amigas compraron cada una una malteada del mismo precio y, entre las tres, un combo de papas de $6.000; en total pagaron $27.000. Si p es el precio de una malteada, ¿cuál ecuación permite hallarlo?",
+     options:["3p + 6.000 = 27.000","p + 6.000 = 27.000","3(p + 6.000) = 27.000","3p − 6.000 = 27.000"], correct:0,
+     just:"Cada una compró una malteada (3p) y el combo se compró una sola vez entre las tres, por eso se suma aparte. La opción C multiplicaría también el combo por 3, lo cual no corresponde al contexto."},
+    {stem:"Al resolver la ecuación 5x − 8 = 27, el valor de x es:",
+     options:["3,8","4","7","19"], correct:2,
+     just:"Sumando 8 en ambos lados: 5x=35. Dividiendo entre 5: x=7. Un error común es olvidar dividir después de despejar."},
+    {stem:"Un vendedor de arepas gana $700 por cada arepa vendida, pero debe pagar $15.000 diarios de arriendo del puesto. Si un día ganó una utilidad neta de $27.000, ¿cuántas arepas vendió?",
+     options:["40","42","60","64"], correct:2,
+     just:"La ecuación es 700x − 15.000 = 27.000. Sumando 15.000: 700x = 42.000. Dividiendo entre 700: x = 60."}
+  ],
+  equations:[
+    {label:"3.000 + 1.500x = 10.500  (parqueadero)", a:1500, b:3000, c:0, d:10500},
+    {label:"x + (x + 6) = 34  (edades de las primas)", a:2, b:6, c:0, d:34},
+    {label:"60.000 + 35.000x = 340.000  (plan de gimnasio)", a:35000, b:60000, c:0, d:340000},
+    {label:"2(x − 3) = 16", a:2, b:-6, c:0, d:16},
+    {label:"900x + 2.000 = 23.600  (mangos de la frutera)", a:900, b:2000, c:0, d:23600}
+  ]
+},
+{
+  id:"s3", num:"03", navLabel:"SEMANA 03", isWeek:true, title:"Semana 3", theme:"Congruencia y semejanza de triángulos", axis:"geo",
+  objective:"Reconocer, mediante la observación de figuras, cuándo dos triángulos son congruentes, usando los criterios LAL, ALA y LLL.",
+  concepts:[
+    {h:"¿Qué significa ser congruentes?", body:"<p>Dos figuras son <b>congruentes</b> cuando tienen exactamente la misma forma y el mismo tamaño: si recortaras una y la pusieras sobre la otra, coincidirían perfectamente (aunque estén giradas o volteadas).</p>"},
+    {h:"Los tres criterios", body:"<ul style='margin:6px 0 0 18px; padding:0;'><li style='margin-bottom:5px;'><b>LLL</b> — los tres lados de un triángulo son iguales, en el mismo orden, a los del otro.</li><li style='margin-bottom:5px;'><b>LAL</b> — dos lados y el ángulo <i>comprendido entre ellos</i> son iguales.</li><li><b>ALA</b> — dos ángulos y el lado <i>comprendido entre ellos</i> son iguales.</li></ul>"},
+    {h:"El detalle que evalúa el ICFES", body:"<p>Lo más importante es verificar si el lado o ángulo dado está realmente <i>entre</i> los otros dos elementos conocidos. Si no lo está, el criterio no aplica de esa forma, aunque los datos «se parezcan».</p>"}
+  ],
+  examples:[
+    {h:"Estructura de un techo simétrico", body:"<div class='figs'><figure><svg width='150' height='110' viewBox='0 0 150 110'><polygon points='15,95 75,15 135,95' fill='#E7EFF6' stroke='#1F4E79' stroke-width='2'/><text x='38' y='62' font-size='9' fill='#1F4E79'>7 m</text><text x='95' y='62' font-size='9' fill='#1F4E79'>7 m</text><text x='68' y='26' font-size='9' fill='#C9821E'>62°</text></svg><figcaption>Triángulo 1</figcaption></figure><figure><svg width='150' height='110' viewBox='0 0 150 110'><polygon points='15,95 75,15 135,95' fill='#FFF3DC' stroke='#C9821E' stroke-width='2'/><text x='38' y='62' font-size='9' fill='#1F4E79'>7 m</text><text x='95' y='62' font-size='9' fill='#1F4E79'>7 m</text><text x='68' y='26' font-size='9' fill='#C9821E'>62°</text></svg><figcaption>Triángulo 2</figcaption></figure></div><p>Ambos triángulos comparten dos lados de 7 m y el ángulo comprendido entre ellos (62°). Como se cumple lado–ángulo–lado con el ángulo justo entre los lados, son congruentes por <b>LAL</b>: el techo será simétrico y estable.</p>"},
+    {h:"Verificación en un puente", body:"<p>En la armadura de un puente, dos triángulos comparten un lado de 5 m, y en ambos los ángulos en los extremos de ese lado miden 48° y 70°. Como se conocen dos ángulos y el lado <i>entre ellos</i>, son congruentes por <b>ALA</b>: la carga se distribuye equilibradamente.</p>"}
+  ],
+  exercises:[
+    {t:"Dos triángulos tienen sus tres lados respectivamente iguales: 6 cm, 8 cm y 10 cm. ¿Qué criterio permite afirmar que son congruentes? Justifica.", tags:["raz"], hint:"Cuenta cuántos elementos conoces y de qué tipo son (lados o ángulos)."},
+    {t:"En dos triángulos se conocen dos lados iguales, pero el ángulo igual conocido <i>no</i> está entre esos dos lados. ¿Puedes afirmar LAL con certeza? Explica por qué.", tags:["raz"], hint:"Recuerda: el ángulo debe estar exactamente entre los dos lados conocidos."},
+    {t:"Dibuja dos triángulos que cumplan el criterio ALA y explica con tus palabras por qué son congruentes.", tags:["com"], hint:"Marca primero los dos ángulos y luego el lado que los conecta."},
+    {t:"Un carpintero corta dos piezas triangulares para un soporte: ambas con lados de 30 cm y 40 cm, y el ángulo entre ellos de 90°. ¿Qué criterio garantiza que las piezas son congruentes?", tags:["raz","mod"], hint:"Identifica si el ángulo dado está comprendido entre los dos lados."},
+    {t:"Explica la diferencia entre el criterio LAL y el criterio ALA usando tus propias palabras, sin usar la palabra «lado» ni «ángulo» en la primera frase.", tags:["com"], hint:"Piensa en qué tipo de dato va en el medio de la comparación (una medida de longitud o una abertura)."},
+    {t:"Dos antenas triangulares de telecomunicaciones deben ser idénticas por seguridad estructural. Si se miden sus tres ángulos y son iguales entre sí (pero no se midieron los lados), ¿es suficiente esto para garantizar que son congruentes? Justifica tu respuesta.", tags:["raz"], hint:"Piensa si dos triángulos pueden tener los mismos ángulos pero tamaños distintos."}
+  ],
+  icfes:[
+    {stem:"Se sabe que AB = DE = 6 cm, BC = EF = 9 cm, y el ángulo B (entre AB y BC) es igual al ángulo E (entre DE y EF), ambos de 55°. ¿Qué criterio garantiza que ABC y DEF son congruentes?",
+     options:["LLL, porque se conocen dos lados iguales","LAL, porque el ángulo igual está comprendido entre los dos lados iguales","ALA, porque hay un ángulo igual entre los lados","No se puede determinar la congruencia con estos datos"], correct:1,
+     just:"Se tienen dos lados correspondientes iguales y el ángulo comprendido exactamente entre ellos: esto corresponde al criterio LAL. No es LLL porque solo se conocen dos lados, y no es ALA porque el dato entre los lados es un ángulo, no un lado."},
+    {stem:"Dos paneles solares triangulares tienen sus tres lados exactamente iguales entre sí: 120 cm, 150 cm y 180 cm. ¿Qué criterio respalda que tienen la misma forma y tamaño?",
+     options:["ALA, porque los ángulos correspondientes también deben ser iguales","LAL, porque hay un ángulo comprendido entre dos lados","LLL, porque los tres lados correspondientes son iguales","No puede garantizarse sin medir los ángulos"], correct:2,
+     just:"Cuando los tres lados de un triángulo son respectivamente iguales a los de otro, se cumple LLL, suficiente para garantizar congruencia sin medir ángulos."},
+    {stem:"En dos triángulos, dos ángulos correspondientes son iguales (40° y 75°), pero el lado conocido igual <i>no</i> está ubicado entre esos dos ángulos, sino opuesto a uno de ellos. ¿Qué puede afirmarse?",
+     options:["Son congruentes por ALA, sin importar la posición del lado","Son congruentes por LAL, porque hay un lado y dos ángulos","Podrían ser congruentes por otro criterio (AAL), pero no se cumple ALA tal como está definido","Nunca pueden ser congruentes en ese caso"], correct:2,
+     just:"El criterio ALA exige que el lado esté comprendido entre los dos ángulos. Si el lado es opuesto a uno de ellos, no se cumple ALA como tal (aunque exista un criterio relacionado, AAL, la pregunta evalúa el reconocimiento preciso de ALA)."}
+  ],
+  similarity:{
+    concepts:[
+      {h:"¿Qué es la semejanza de triángulos?", body:"<p>Dos triángulos son <b>semejantes</b> cuando tienen exactamente la misma forma, aunque no necesariamente el mismo tamaño: es como una foto original y una copia ampliada o reducida, o como un mapa y el territorio real. Para que dos triángulos sean semejantes deben cumplirse <b>las dos condiciones a la vez</b>:</p><ul style='margin:6px 0 0 18px; padding:0;'><li style='margin-bottom:4px;'>Sus <b>ángulos correspondientes son iguales</b> (ángulo por ángulo).</li><li>Sus <b>lados correspondientes son proporcionales</b>: no tienen que medir lo mismo, pero deben guardar siempre la misma razón entre sí.</li></ul><p style='margin-top:8px;'><b>La diferencia clave con la congruencia:</b> la <b>congruencia</b> exige misma forma <i>y</i> mismo tamaño (los lados son exactamente iguales); la <b>semejanza</b> solo exige misma forma (los lados son proporcionales, no necesariamente iguales). Por eso, todo par de triángulos congruentes también es semejante (con razón 1:1), pero no todo par de triángulos semejantes es congruente.</p>"},
+      {h:"La razón (o escala) de semejanza", body:"<p>Cuando dos triángulos son semejantes, existe un número fijo <b>k</b>, llamado <b>razón de semejanza</b> (o escala), tal que cada lado de un triángulo es igual a k veces el lado correspondiente del otro.</p><div class='formula'>lado del triángulo grande = k × lado correspondiente del triángulo pequeño</div><p><b>Ejemplo numérico:</b> si un triángulo tiene lados 3 cm, 4 cm y 5 cm, y otro semejante a él tiene lados 6 cm, 8 cm y 10 cm, entonces: 6÷3 = 2, 8÷4 = 2, 10÷5 = 2. Las tres razones dan el mismo número, <b>k = 2</b>: el segundo triángulo es exactamente el doble del primero, conservando su forma.</p><p>Si al dividir los lados correspondientes obtienes razones <i>distintas</i>, los triángulos <b>no</b> son semejantes, aunque se parezcan a simple vista.</p>"},
+      {h:"Los tres criterios de semejanza: AA, LAL~ y LLL~", body:"<p>Al igual que con la congruencia, no es necesario comprobar los tres ángulos y los tres lados: basta con verificar uno de estos tres criterios.</p><ul style='margin:6px 0 10px 18px; padding:0;'><li style='margin-bottom:8px;'><b>AA (Ángulo–Ángulo):</b> si dos ángulos de un triángulo son iguales a dos ángulos de otro, los triángulos ya son semejantes. (El tercer ángulo queda determinado solo, porque los tres ángulos internos de cualquier triángulo siempre suman 180°). Es el criterio más rápido de usar.</li><li style='margin-bottom:8px;'><b>LAL~ (Lado–Ángulo–Lado, versión de semejanza):</b> si dos lados de un triángulo son <i>proporcionales</i> a dos lados de otro (misma razón k), y el ángulo <i>comprendido</i> entre esos lados es igual en ambos, los triángulos son semejantes.</li><li><b>LLL~ (Lado–Lado–Lado, versión de semejanza):</b> si los tres lados de un triángulo son proporcionales a los tres lados de otro (las tres razones dan el mismo número k), los triángulos son semejantes — sin necesidad de medir ningún ángulo.</li></ul><p><b>No los confundas con los criterios de congruencia</b> (LAL, ALA, LLL): en congruencia los elementos deben ser <i>exactamente iguales</i>; en semejanza, los lados solo deben ser <i>proporcionales</i> (guardar la misma razón), mientras que los ángulos sí deben seguir siendo exactamente iguales en ambos casos.</p>"},
+      {h:"Cómo resolver un problema de semejanza, paso a paso", body:"<p>Cuando te pidan hallar una medida desconocida usando semejanza, sigue siempre esta ruta:</p><ol style='margin:6px 0 0 18px; padding:0;'><li style='margin-bottom:4px;'>Identifica los dos triángulos semejantes y confirma el criterio (AA, LAL~ o LLL~).</li><li style='margin-bottom:4px;'>Empareja los lados <i>correspondientes</i> (el lado grande de uno con su pareja en el otro).</li><li style='margin-bottom:4px;'>Plantea una <b>proporción</b>: lado conocido₁ / lado conocido₂ = lado conocido₃ / lado desconocido.</li><li style='margin-bottom:4px;'>Resuelve por <b>multiplicación cruzada</b> (el producto de los extremos es igual al producto de los medios).</li><li>Verifica que el resultado tenga sentido con el contexto (unidades correctas, magnitud razonable).</li></ol>"}
+    ],
+    examples:[
+      {h:"Medir un árbol con su sombra (sin subirte a él)", body:"<p>Una estudiante de 1,6 m de estatura proyecta una sombra de 2 m al mismo tiempo que un árbol cercano proyecta una sombra de 9 m. Como el sol forma el mismo ángulo sobre ambos objetos y los dos forman un ángulo recto con el suelo, los dos triángulos (estudiante–sombra y árbol–sombra) comparten dos ángulos iguales: son semejantes por <b>AA</b>. Entonces sus lados correspondientes son proporcionales:</p><div class='formula'>altura árbol / 1,6 = 9 / 2</div><p>altura árbol = 1,6 × (9 ÷ 2) = <b>7,2 m</b>. Así, sin instrumentos costosos, se puede calcular la altura de algo muy grande usando solo una sombra y una regla.</p>"},
+      {h:"Verificar la semejanza paso a paso (criterio LLL~)", body:"<p>Dos piezas triangulares de un techo tienen estas medidas: la primera, 4 m, 6 m y 8 m; la segunda, 6 m, 9 m y 12 m. ¿Son semejantes?</p><div class='formula'>6 ÷ 4 = 1,5 &nbsp;&nbsp;·&nbsp;&nbsp; 9 ÷ 6 = 1,5 &nbsp;&nbsp;·&nbsp;&nbsp; 12 ÷ 8 = 1,5</div><p>Las tres razones dan exactamente el mismo número (k = 1,5), así que sí son semejantes por <b>LLL~</b>, con razón de semejanza 1,5 (la pieza grande es una vez y media la pequeña). Si aunque sea una sola razón hubiera dado diferente, ya no serían semejantes.</p>"}
+    ],
+    exercises:[
+      {t:"Un triángulo tiene ángulos de 50° y 70°. Otro triángulo tiene ángulos de 50° y 60°. ¿Son semejantes? Justifica usando el criterio AA.", tags:["raz"], hint:"Recuerda que los tres ángulos internos de un triángulo siempre suman 180°: calcula el tercer ángulo de cada uno antes de comparar.", solution:"Tercer ángulo del primero: 180° − 50° − 70° = 60°. Tercer ángulo del segundo: 180° − 50° − 60° = 70°. Ambos triángulos tienen los mismos tres ángulos (50°, 60°, 70°), así que <b>sí son semejantes por AA</b> (con solo dos ángulos iguales ya bastaba)."},
+      {t:"El triángulo A tiene lados 5 cm, 7 cm y 9 cm. El triángulo B tiene lados 10 cm, 14 cm y 18 cm. ¿Son semejantes? Si lo son, ¿cuál es la razón de semejanza?", tags:["raz","mod"], hint:"Divide cada lado de B entre su lado correspondiente en A, y compara las tres razones obtenidas.", solution:"10÷5 = 2, 14÷7 = 2, 18÷9 = 2. Las tres razones son iguales, así que <b>sí son semejantes por LLL~</b>, con razón de semejanza <b>k = 2</b> (B es el doble de A)."},
+      {t:"Dos triángulos comparten un ángulo de 40°. En uno, los lados que forman ese ángulo miden 6 cm y 9 cm; en el otro, 8 cm y 12 cm. ¿Son semejantes por LAL~?", tags:["raz"], hint:"Compara la razón entre cada par de lados que rodean el ángulo igual (8÷6 y 12÷9).", solution:"8÷6 = 4/3 y 12÷9 = 4/3: las razones coinciden, y el ángulo comprendido es igual (40°) en ambos triángulos. <b>Sí son semejantes por LAL~</b>, con razón de semejanza 4/3."},
+      {t:"Una escalera pequeña, apoyada contra una pared, mide 2 m de largo y alcanza 1,6 m de altura en la pared. Una escalera más grande, con la misma inclinación, mide 5 m de largo. Suponiendo que forman triángulos semejantes, ¿a qué altura llegará en la pared?", tags:["mod","raz"], hint:"Plantea una proporción entre altura y largo: la razón altura/largo debe ser la misma en los dos triángulos.", solution:"1,6/2 = h/5 → h = (1,6 × 5) ÷ 2 = <b>4 m</b>."},
+      {t:"Una fotografía triangular decorativa mide 8 cm de base y 6 cm de altura. Se manda a ampliar conservando la misma proporción (semejanza), y la nueva base mide 20 cm. ¿Cuál será la nueva altura?", tags:["mod"], hint:"Primero halla la razón de semejanza comparando las dos bases; luego aplícala a la altura.", solution:"Razón de semejanza: 20÷8 = 2,5. Nueva altura = 6 × 2,5 = <b>15 cm</b>."},
+      {t:"A las 3 de la tarde, un poste de 3 m de altura proyecta una sombra de 4 m. En ese mismo instante, un edificio cercano proyecta una sombra de 24 m. ¿Cuál es la altura del edificio?", tags:["mod","raz"], hint:"La razón altura/sombra debe ser igual en los dos triángulos semejantes formados por el sol.", solution:"3/4 = h/24 → h = (3 × 24) ÷ 4 = <b>18 m</b>."},
+      {t:"Un triángulo tiene lados 4 cm, 5 cm y 6 cm; otro triángulo (rotado) tiene también 4 cm, 5 cm y 6 cm; un tercer triángulo tiene lados 8 cm, 10 cm y 12 cm. ¿Cuáles pares son congruentes y cuáles son solo semejantes? Explica la diferencia con tus palabras.", tags:["com","raz"], hint:"Congruentes = misma forma y mismo tamaño (lados exactamente iguales). Semejantes = misma forma, tamaños proporcionales.", solution:"El primer y segundo triángulo son <b>congruentes</b> por LLL (tienen exactamente los mismos tres lados). Cualquiera de esos dos, comparado con el tercero, es <b>semejante</b> por LLL~ con razón 2 (8/4 = 10/5 = 12/6 = 2), pero no son congruentes entre sí porque sus tamaños son distintos."},
+      {t:"Dibuja en tu cuaderno dos triángulos semejantes que NO sean congruentes entre sí. Indica las medidas que usaste, el criterio de semejanza que se cumple (AA, LAL~ o LLL~) y la razón de semejanza entre ambos.", tags:["com","mod"], hint:"Elige un triángulo con medidas sencillas (por ejemplo, 3 cm, 4 cm y 5 cm) y multiplica todos sus lados por el mismo número para crear el segundo triángulo."}
+    ]
+  }
+},
+{
+  id:"s4", num:"04", navLabel:"SEMANA 04", isWeek:true, title:"Semana 4", theme:"Integración final · Simulacro", axis:"mix",
+  objective:"Combinar el lenguaje algebraico y la congruencia de triángulos para justificar diseños reales, y afianzar el razonamiento con un simulacro final.",
+  concepts:[
+    {h:"Álgebra + geometría, de la mano", body:"<p>En muchos problemas de las Pruebas Saber, primero se plantea una ecuación para hallar una medida desconocida (un lado o un ángulo) y luego se usa esa medida para argumentar la congruencia entre figuras.</p>"},
+    {h:"Ruta de trabajo", body:"<p>1) Lee con cuidado el contexto. 2) Identifica qué información falta. 3) Plantea la expresión o ecuación algebraica correspondiente. 4) Aplica el criterio de congruencia adecuado para justificar tu conclusión.</p>"}
+  ],
+  examples:[
+    {h:"Techo simétrico con incógnita", body:"<p>Dos triángulos de un techo deben ser congruentes por LAL: comparten un lado de 5 m y un ángulo de 58°; el otro lado mide (2x+1) m en el primero y (3x−2) m en el segundo.</p><div class='formula'>2x + 1 = 3x − 2  →  x = 3</div><p>Ambos lados miden 2(3)+1 = 7 m. Confirmado LAL (5 m, 58°, 7 m), el techo será perfectamente simétrico.</p>"}
+  ],
+  exercises:[
+    {t:"Dos triángulos de una escalera deben ser congruentes por ALA. Comparten un lado de 40 cm, con ángulos de 50° y 70° en ambos, y sus terceros lados son (4x−3) cm y (2x+7) cm. Plantea la ecuación, halla x y verifica.", tags:["mod","raz"], hint:"Para ALA, el lado no comprendido también debe coincidir si quieres verificar consistencia numérica."},
+    {t:"Explica en un párrafo breve por qué es importante para un ingeniero civil verificar la congruencia entre secciones triangulares antes de construir.", tags:["com"], hint:"Piensa en distribución de peso y simetría estructural."},
+    {t:"Dos ventanas triangulares decorativas deben ser congruentes por LLL. Sus lados son 12 cm, 15 cm y (5x−6) cm en una, y 12 cm, 15 cm y (3x+4) cm en la otra. Halla x y el valor del tercer lado.", tags:["mod","raz"], hint:"Iguala las dos expresiones del tercer lado."},
+    {t:"Una diseñadora cobra $50.000 fijos por boceto más $18.000 por cada hora de trabajo adicional en un logotipo triangular simétrico. Si el diseño costó $140.000, ¿cuántas horas adicionales trabajó?", tags:["mod"], hint:"Plantea primero la ecuación general, luego despeja."},
+    {t:"Dos triángulos de una cometa deben ser congruentes por LAL. Comparten un ángulo de 40° y un lado de 18 cm; el otro lado mide (6x−9) cm y (4x+3) cm respectivamente. Encuentra x y confirma la medida común.", tags:["mod","raz"], hint:"Iguala las dos expresiones para hallar x."},
+    {t:"Redacta tú misma una situación cotidiana (de arquitectura, diseño o deporte) que se pueda resolver planteando una ecuación y aplicando un criterio de congruencia. Intercámbiala con una compañera.", tags:["com","mod"], hint:"Piensa en dos figuras triangulares que deban ser idénticas por diseño o simetría."}
+  ],
+  icfes:[
+    {stem:"Dos triángulos ABC y DEF deben ser congruentes por LLL. AB = DE = 8 cm, BC = EF = 12 cm, y AC = (5x−4) cm mientras DF = (3x+6) cm. ¿Cuál es el valor de x?",
+     options:["x = 2","x = 5","x = 8","x = 10"], correct:1,
+     just:"Para LLL, el tercer lado también debe ser igual: 5x−4 = 3x+6 → 2x = 10 → x = 5. Con este valor, AC = DF = 21 cm."},
+    {stem:"Una fábrica de muebles cobra $45.000 por el armazón base más $9.000 por hora de mano de obra adicional. El costo total de una silla fue $99.000. ¿Cuántas horas adicionales se emplearon?",
+     options:["4 horas","6 horas","9 horas","16 horas"], correct:1,
+     just:"9.000h + 45.000 = 99.000 → 9.000h = 54.000 → h = 6."},
+    {stem:"Dos triángulos deben ser congruentes por ALA: comparten un lado de 14 cm y ángulos de 45° y 65° en ambos extremos de ese lado. Si esto se cumple exactamente así en las dos figuras, ¿qué puede concluirse?",
+     options:["Son congruentes por ALA, sin necesidad de más datos","Se necesita conocer también los tres lados para confirmar","Solo son congruentes si además los terceros lados son iguales","No son congruentes porque falta un lado"], correct:0,
+     just:"El criterio ALA solo exige dos ángulos y el lado comprendido entre ellos; con esos tres datos iguales, la congruencia queda garantizada sin necesidad de verificar el tercer lado."},
+    {stem:"Un puente peatonal usa dos triángulos congruentes por LAL: comparten un ángulo de 90° entre lados de (3x+2) m y 10 m en el primero, y de 20 m y 10 m en el segundo. ¿Cuál es el valor de x para que los triángulos sean congruentes?",
+     options:["x = 4","x = 6","x = 9","x = 12"], correct:1,
+     just:"Para que LAL se cumpla, el lado variable debe igualar al lado correspondiente conocido: 3x+2 = 20 → 3x = 18 → x = 6."}
+  ],
+  equations:[
+    {label:"4x − 3 = 2x + 7  (escalera)", a:4, b:-3, c:2, d:7},
+    {label:"5x − 6 = 3x + 4  (ventanas)", a:5, b:-6, c:3, d:4},
+    {label:"50.000 + 18.000x = 140.000  (logotipo)", a:18000, b:50000, c:0, d:140000},
+    {label:"6x − 9 = 4x + 3  (cometa)", a:6, b:-9, c:4, d:3}
+  ]
+},
+{
+  id:"eq", num:"EX", navLabel:"TEMA EXTRA", isWeek:false, title:"Ecuaciones algebraicas", theme:"Ecuaciones algebraicas · Teoría y práctica guiada", axis:"eq",
+  objective:"Entender la jerarquía de signos y el proceso paso a paso para resolver ecuaciones, y practicar desde casos sencillos hasta ecuaciones más complejas.",
+  concepts:[
+    {h:"La jerarquía de signos: reglas para sumar, restar, multiplicar y dividir", body:"<p>Antes de resolver cualquier ecuación necesitas tener muy claras estas reglas. No te las aprendas de memoria sin entenderlas: practícalas hasta que te salgan solas.</p><p><b>Para sumar y restar (signos iguales o distintos):</b></p><ul style='margin:6px 0 10px 18px; padding:0;'><li style='margin-bottom:4px;'>Si los signos son <b>iguales</b>, se suman los números y se deja ese mismo signo. Ej: 5 + 3 = 8 &nbsp;·&nbsp; (−5) + (−3) = −8</li><li>Si los signos son <b>distintos</b>, se resta el número menor al mayor, y el resultado lleva el signo del número más grande (en valor absoluto). Ej: (−5) + 3 = −2 &nbsp;·&nbsp; 5 + (−3) = 2 &nbsp;·&nbsp; 5 − 8 = −3</li></ul><p><b>Para multiplicar y dividir:</b></p><ul style='margin:6px 0 0 18px; padding:0;'><li style='margin-bottom:4px;'><b>Signos iguales → resultado positivo.</b> Ej: (−4) × (−3) = 12 &nbsp;·&nbsp; (−12) ÷ (−4) = 3</li><li><b>Signos distintos → resultado negativo.</b> Ej: (−4) × 3 = −12 &nbsp;·&nbsp; 12 ÷ (−4) = −3</li></ul>"},
+    {h:"La jerarquía de operaciones: ¿en qué orden se resuelve todo?", body:"<p>Cuando una expresión tiene varias operaciones mezcladas, no se resuelven de izquierda a derecha sin pensar: hay un orden obligatorio.</p><ol style='margin:6px 0 10px 18px; padding:0;'><li style='margin-bottom:4px;'>Primero, lo que está dentro de <b>paréntesis, corchetes o llaves</b>.</li><li style='margin-bottom:4px;'>Luego, <b>potencias y raíces</b>.</li><li style='margin-bottom:4px;'>Después, <b>multiplicaciones y divisiones</b>, en el orden en que aparecen (de izquierda a derecha).</li><li><b>Al final, sumas y restas</b>, también de izquierda a derecha.</li></ol><p><b>Ejemplo:</b> resolvamos 4 + 2 × (6 − 3)²</p><div class='formula'>1) Paréntesis: (6−3) = 3<br>2) Potencia: 3² = 9<br>3) Multiplicación: 2 × 9 = 18<br>4) Suma: 4 + 18 = 22</div><p>Si sumaras 4+2 primero, ¡te daría un resultado totalmente distinto y equivocado! Por eso este orden es tan importante en una ecuación.</p>"},
+    {h:"¿Qué es exactamente «resolver» una ecuación?", body:"<p>Una ecuación es una balanza: lo que hay a la izquierda del signo = pesa exactamente lo mismo que lo de la derecha. <b>Resolverla</b> es encontrar el valor de la variable que mantiene esa balanza equilibrada.</p><p>La regla de oro: <b>todo lo que le hagas a un lado de la ecuación, se lo tienes que hacer también al otro lado</b> (sumar, restar, multiplicar o dividir por el mismo número en ambos lados), para que la balanza no se desequilibre.</p>"}
+  ],
+  examples:[
+    {h:"El proceso completo, paso a paso, con un ejemplo guiado", body:"<p>Vamos a resolver una ecuación con paréntesis y variable en un solo lado: <span class='mono'>3(x + 2) − 4 = 17</span></p><div class='formula'>Paso 1 — Resolver el paréntesis (distribuir):<br>3x + 6 − 4 = 17<br><br>Paso 2 — Reducir términos semejantes (los números sueltos):<br>3x + 2 = 17<br><br>Paso 3 — Pasar el número al otro lado (operación inversa: si suma, se resta):<br>3x = 17 − 2 → 3x = 15<br><br>Paso 4 — Despejar la variable (dividir entre el coeficiente):<br>x = 15 ÷ 3 → x = 5<br><br>Paso 5 — Verificar, reemplazando x = 5 en la ecuación ORIGINAL:<br>3(5 + 2) − 4 = 3(7) − 4 = 21 − 4 = 17 ✔</span></div><p>Siempre que termines un ejercicio, haz este último paso de verificación: es la forma más segura de saber si tu respuesta es correcta, sin depender de que alguien más te lo confirme.</p>"}
+  ],
+  groups:[
+    {label:"Nivel 1 · Ecuaciones de un solo paso", count:4},
+    {label:"Nivel 2 · Ecuaciones de dos pasos", count:4},
+    {label:"Nivel 3 · Con paréntesis y términos semejantes", count:4},
+    {label:"Nivel 4 · Variable en ambos lados (avanzadas)", count:4}
+  ],
+  exercises:[
+    {t:"Resuelve: <span class='mono'>x + 6 = 15</span>", tags:["raz"], hint:"Para despejar x, resta 6 en ambos lados.", solution:"x + 6 = 15 → x = 15 − 6 → <b>x = 9</b>. Verificación: 9 + 6 = 15 ✔"},
+    {t:"Resuelve: <span class='mono'>x − 8 = 3</span>", tags:["raz"], hint:"La operación inversa de restar es sumar.", solution:"x − 8 = 3 → x = 3 + 8 → <b>x = 11</b>. Verificación: 11 − 8 = 3 ✔"},
+    {t:"Resuelve: <span class='mono'>4x = 28</span>", tags:["raz"], hint:"Divide ambos lados entre 4.", solution:"4x = 28 → x = 28 ÷ 4 → <b>x = 7</b>. Verificación: 4(7) = 28 ✔"},
+    {t:"Resuelve: <span class='mono'>x ÷ 5 = 6</span>", tags:["raz"], hint:"La operación inversa de dividir es multiplicar.", solution:"x ÷ 5 = 6 → x = 6 × 5 → <b>x = 30</b>. Verificación: 30 ÷ 5 = 6 ✔"},
+    {t:"Resuelve: <span class='mono'>2x + 5 = 17</span>", tags:["raz"], hint:"Primero pasa el 5 al otro lado restando, y al final divide.", solution:"2x + 5 = 17 → 2x = 17 − 5 → 2x = 12 → <b>x = 6</b>. Verificación: 2(6)+5 = 17 ✔"},
+    {t:"Resuelve: <span class='mono'>5x − 3 = 27</span>", tags:["raz"], hint:"Pasa el −3 al otro lado sumando.", solution:"5x − 3 = 27 → 5x = 27 + 3 → 5x = 30 → <b>x = 6</b>. Verificación: 5(6)−3 = 27 ✔"},
+    {t:"Resuelve: <span class='mono'>−3x + 4 = −11</span>", tags:["raz"], hint:"Recuerda la jerarquía de signos al dividir por un número negativo.", solution:"−3x + 4 = −11 → −3x = −11 − 4 → −3x = −15 → x = (−15)÷(−3) → <b>x = 5</b> (signos iguales al dividir da positivo). Verificación: −3(5)+4 = −15+4 = −11 ✔"},
+    {t:"Resuelve: <span class='mono'>x ÷ 2 + 7 = 10</span>", tags:["raz"], hint:"Primero aísla el término con la x, luego multiplica.", solution:"x÷2 + 7 = 10 → x÷2 = 10 − 7 → x÷2 = 3 → x = 3 × 2 → <b>x = 6</b>. Verificación: 6÷2+7 = 3+7 = 10 ✔"},
+    {t:"Resuelve: <span class='mono'>3(x + 2) = 21</span>", tags:["raz","mod"], hint:"Puedes distribuir el 3, o dividir ambos lados entre 3 primero.", solution:"3(x+2) = 21 → x+2 = 21÷3 → x+2 = 7 → <b>x = 5</b>. Verificación: 3(5+2) = 3(7) = 21 ✔"},
+    {t:"Resuelve: <span class='mono'>2(x − 4) + 5 = 15</span>", tags:["raz","mod"], hint:"Distribuye primero el 2, luego reduce los números sueltos.", solution:"2(x−4)+5 = 15 → 2x−8+5 = 15 → 2x−3 = 15 → 2x = 18 → <b>x = 9</b>. Verificación: 2(9−4)+5 = 2(5)+5 = 15 ✔"},
+    {t:"Resuelve: <span class='mono'>4x + 2 − x = 17</span>", tags:["raz"], hint:"Antes de despejar, reduce los términos con x: 4x y −x son semejantes.", solution:"4x+2−x = 17 → 3x+2 = 17 → 3x = 15 → <b>x = 5</b>. Verificación: 4(5)+2−5 = 20+2−5 = 17 ✔"},
+    {t:"Resuelve: <span class='mono'>−2(x − 3) = 10</span>", tags:["raz","mod"], hint:"Al distribuir −2, cuidado con la jerarquía de signos: −2 × (−3) es positivo.", solution:"−2(x−3) = 10 → −2x + 6 = 10 → −2x = 4 → x = 4÷(−2) → <b>x = −2</b>. Verificación: −2(−2−3) = −2(−5) = 10 ✔"},
+    {t:"Resuelve: <span class='mono'>5x + 3 = 2x + 18</span>", tags:["raz","mod"], hint:"Pasa todos los términos con x a un lado y los números al otro.", solution:"5x+3 = 2x+18 → 5x−2x = 18−3 → 3x = 15 → <b>x = 5</b>. Verificación: 5(5)+3=28 y 2(5)+18=28 ✔"},
+    {t:"Resuelve: <span class='mono'>7x − 4 = 3x + 12</span>", tags:["raz","mod"], hint:"Agrupa las x de un lado y los números del otro, con cuidado en los signos.", solution:"7x−4 = 3x+12 → 7x−3x = 12+4 → 4x = 16 → <b>x = 4</b>. Verificación: 7(4)−4=24 y 3(4)+12=24 ✔"},
+    {t:"Resuelve: <span class='mono'>2(x + 3) = x + 10</span>", tags:["raz","mod"], hint:"Primero distribuye el 2 en el lado izquierdo, luego agrupa las x.", solution:"2(x+3) = x+10 → 2x+6 = x+10 → 2x−x = 10−6 → <b>x = 4</b>. Verificación: 2(4+3)=14 y 4+10=14 ✔"},
+    {t:"Resuelve: <span class='mono'>−4x + 5 = −2x − 3</span>", tags:["raz","mod"], hint:"Ten mucho cuidado con los signos al mover términos negativos de lugar.", solution:"−4x+5 = −2x−3 → −4x+2x = −3−5 → −2x = −8 → x = (−8)÷(−2) → <b>x = 4</b>. Verificación: −4(4)+5=−11 y −2(4)−3=−11 ✔"}
+  ],
+  icfes:[
+    {stem:"¿Cuál es el resultado de −8 + 3?",
+     options:["−11","−5","5","11"], correct:1,
+     just:"Los signos son distintos, así que se resta el menor al mayor (8−3=5) y el resultado lleva el signo del número con mayor valor absoluto (el −8), quedando −5."},
+    {stem:"Al resolver la expresión 5 + 2 × (7 − 4), ¿cuál operación se debe realizar primero?",
+     options:["Multiplicar 2 × 7","Restar 7 − 4, dentro del paréntesis","Sumar 5 + 2","Multiplicar 2 × 4"], correct:1,
+     just:"La jerarquía de operaciones indica que lo que está dentro de un paréntesis se resuelve siempre primero, antes de cualquier multiplicación o suma."},
+    {stem:"¿Cuál es el resultado de (−6) × (−2)?",
+     options:["−12","−8","8","12"], correct:3,
+     just:"Al multiplicar dos números con el mismo signo (negativo × negativo), el resultado es positivo: 6 × 2 = 12."}
+  ],
+  equations:[
+    {label:"x + 6 = 15", a:1, b:6, c:0, d:15},
+    {label:"2x + 5 = 17", a:2, b:5, c:0, d:17},
+    {label:"3(x + 2) = 21  →  3x + 6 = 21", a:3, b:6, c:0, d:21},
+    {label:"5x + 3 = 2x + 18", a:5, b:3, c:2, d:18},
+    {label:"7x − 4 = 3x + 12", a:7, b:-4, c:3, d:12},
+    {label:"−4x + 5 = −2x − 3", a:-4, b:5, c:-2, d:-3}
+  ]
+}
+];
+
+const FINAL_TIPS = [
+  "Lee el problema completo antes de operar: identifica primero qué te preguntan.",
+  "En geometría, marca sobre la figura los datos que ya conoces (lados y ángulos iguales) antes de decidir qué criterio aplicar.",
+  "En álgebra, verifica siempre tu respuesta reemplazando el valor de x en la ecuación original.",
+  "Si una opción «se ve obvia», revisa si corresponde a un error común (confundir área con perímetro, invertir una resta).",
+  "Administra tu tiempo: si una pregunta te toma demasiado, márcala y continúa; puedes volver después."
+];
+
+const TAG_LABEL = {com:"Comunicación", raz:"Razonamiento", mod:"Modelación"};
+const STORE_KEY = "bitacora_icfes_progreso_v1";
+
+/* =========================================================
+   STATE / STORAGE
+========================================================= */
+function loadState(){
+  try{ return JSON.parse(localStorage.getItem(STORE_KEY)) || {ex:{}, icfes:{}}; }
+  catch(e){ return {ex:{}, icfes:{}}; }
+}
+function saveState(){ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+let state = loadState();
+
+/* =========================================================
+   RENDER
+========================================================= */
+const weekNav = document.getElementById('weekNav');
+const mainContent = document.getElementById('mainContent');
+
+function axisIcon(axis){
+  if(axis==="geo") return `<svg class="icon" width="14" height="14" viewBox="0 0 20 20"><polygon points="10,2 18,18 2,18" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
+  if(axis==="mix") return `<svg class="icon" width="14" height="14" viewBox="0 0 20 20"><polygon points="10,2 18,18 2,18" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="10" y="15" text-anchor="middle" font-size="7" fill="currentColor">x</text></svg>`;
+  if(axis==="eq") return `<svg class="icon" width="14" height="14" viewBox="0 0 20 20"><line x1="3" y1="8" x2="17" y2="8" stroke="currentColor" stroke-width="1.8"/><line x1="3" y1="13" x2="17" y2="13" stroke="currentColor" stroke-width="1.8"/></svg>`;
+  return `<svg class="icon" width="14" height="14" viewBox="0 0 20 20"><text x="2" y="15" font-family="IBM Plex Mono" font-size="13" fill="currentColor">x</text></svg>`;
+}
+
+function buildNav(){
+  weekNav.innerHTML = `<div class="wrap" style="display:flex;">${WEEKS.map((w,i)=>`
+    <button class="weektab" role="tab" id="tabbtn-${w.id}" aria-selected="${i===0}" aria-controls="panel-${w.id}" data-target="${w.id}">
+      <span class="num mono">${w.navLabel || w.id.toUpperCase()}</span>
+      <span class="ttl">${w.theme.split(' · ')[0]}</span>
+      <span class="chip">${w.theme.split(' · ')[1]}</span>
+      ${axisIcon(w.axis)}
+    </button>`).join('')}</div>`;
+
+  weekNav.querySelectorAll('.weektab').forEach(btn=>{
+    btn.addEventListener('click', ()=> activateWeek(btn.dataset.target));
+  });
+}
+
+function renderConceptExample(item, cls){
+  return `<div class="block ${cls}"><h4>${item.h}</h4>${item.body}</div>`;
+}
+
+function renderExercise(weekId, ex, idx){
+  const id = `${weekId}-ex-${idx}`;
+  const checked = !!state.ex[id];
+  return `
+  <div class="exercise ${checked?'done':''}" id="wrap-${id}">
+    <input type="checkbox" id="${id}" ${checked?'checked':''} data-id="${id}">
+    <div class="ex-body">
+      <div class="tags">${ex.tags.map(t=>`<span class="tag ${t}">${TAG_LABEL[t]}</span>`).join('')}</div>
+      <label class="ex-text" for="${id}"><b class="ex-num mono">${idx+1}.</b>${ex.t}</label>
+      ${ex.hint ? `<details class="hint"><summary>Ver pista</summary><p>${ex.hint}</p></details>` : ''}
+      ${ex.solution ? `<details class="hint solution"><summary>Ver solución paso a paso</summary><p>${ex.solution}</p></details>` : ''}
+    </div>
+  </div>`;
+}
+
+function renderExercisesBlock(w){
+  if(!w.groups) return w.exercises.map((e,i)=>renderExercise(w.id,e,i)).join('');
+  let out=''; let offset=0;
+  w.groups.forEach(g=>{
+    out += `<h4 style="margin:20px 0 10px 0; color:var(--blueprint-deep); font-size:14px; border-bottom:1px dotted var(--line); padding-bottom:5px;">${g.label}</h4>`;
+    for(let i=0;i<g.count;i++){
+      out += renderExercise(w.id, w.exercises[offset+i], offset+i);
+    }
+    offset += g.count;
+  });
+  return out;
+}
+
+function renderIcfes(weekId, q, idx){
+  const id = `${weekId}-icfes-${idx}`;
+  const letters = ['A','B','C','D'];
+  const saved = state.icfes[id];
+  return `
+  <div class="icfes" id="wrap-${id}">
+    <div class="icfes-head"><span class="icfes-badge">PREGUNTA ${idx+1}</span><span class="mono" style="font-size:11px; color:var(--graphite);">Selección múltiple · única respuesta</span></div>
+    <p class="stem">${q.stem}</p>
+    <div class="opt-list" id="opts-${id}">
+      ${q.options.map((op,i)=>`<button class="opt" data-id="${id}" data-idx="${i}" ${saved!==undefined?'disabled':''}><span class="letter">${letters[i]}</span><span>${op}</span></button>`).join('')}
+    </div>
+    <div class="justification" id="just-${id}"><b>Justificación:</b> ${q.just}</div>
+    <div class="icfes-status" id="status-${id}"></div>
+  </div>`;
+}
+
+function renderSimilarityPanel(w){
+  const s = w.similarity;
+  const concepts = s.concepts || (s.concept ? [s.concept] : []);
+  const examples = s.examples || (s.example ? [s.example] : []);
+  return `
+    ${concepts.map(c=>renderConceptExample(c,'concept')).join('')}
+    ${examples.map(c=>renderConceptExample(c,'example')).join('')}
+    ${s.exercises.map((e,i)=>renderExercise(w.id+'-sim', e, i)).join('')}
+  `;
+}
+
+function fmtSide(a,b){
+  const sign = b>=0 ? '+' : '−';
+  return `${a}×valor ${sign} ${Math.abs(b)}`;
+}
+
+function renderEqChecker(weekId, list){
+  return `
+  <div class="block concept" style="border-left-color:var(--mustard-deep);">
+    <h4>🧮 Comprobador de ecuaciones</h4>
+    <p style="font-size:13.5px;">Elige una de las ecuaciones que trabajaste esta semana, escribe el valor que crees que tiene la variable y pulsa <b>Evaluar</b>: la página calcula los dos lados de la ecuación y te dice si coinciden.</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:10px 0;">
+      <select id="eqSelect-${weekId}" style="font-family:'IBM Plex Mono'; font-size:12.5px; padding:7px 9px; border-radius:6px; border:1px solid var(--line); flex:1 1 260px;">
+        ${list.map((eq,i)=>`<option value="${i}">${eq.label}</option>`).join('')}
+      </select>
+      <input type="number" step="any" id="eqInput-${weekId}" placeholder="tu valor" style="font-family:'IBM Plex Mono'; font-size:13px; padding:7px 9px; border-radius:6px; border:1px solid var(--line); width:110px;">
+      <button id="eqBtn-${weekId}" type="button" style="background:var(--blueprint-deep); color:#fff; border:none; border-radius:6px; padding:8px 16px; cursor:pointer; font-family:var(--font-display); font-weight:600; font-size:13px;">Evaluar</button>
+    </div>
+    <div id="eqResult-${weekId}" class="mono" style="font-size:13px;"></div>
+  </div>`;
+}
+
+function wireEqChecker(weekId, list){
+  const btn = document.getElementById(`eqBtn-${weekId}`);
+  if(!btn) return;
+  btn.addEventListener('click', ()=>{
+    const idx = parseInt(document.getElementById(`eqSelect-${weekId}`).value,10);
+    const raw = document.getElementById(`eqInput-${weekId}`).value;
+    const result = document.getElementById(`eqResult-${weekId}`);
+    if(raw === ''){
+      result.innerHTML = `<span style="color:var(--brick);">Escribe primero un valor para probar.</span>`;
+      return;
+    }
+    const x = parseFloat(raw);
+    const eq = list[idx];
+    const lhs = eq.a*x + eq.b;
+    const rhs = eq.c*x + eq.d;
+    const ok = Math.abs(lhs-rhs) < 0.0001;
+    result.innerHTML = `Lado izquierdo: <b>${round2(lhs)}</b> &nbsp;|&nbsp; Lado derecho: <b>${round2(rhs)}</b><br>` +
+      (ok ? `<span style="color:var(--leaf);">✔ ¡Coinciden! Ese es el valor correcto de la variable.</span>`
+          : `<span style="color:var(--brick);">✘ No coinciden todavía. Vuelve a despejar con calma y prueba otro valor.</span>`);
+  });
+}
+function round2(n){ return Math.round(n*100)/100; }
+
+function renderWeekPanel(w){
+  const subs = [
+    {key:'concepts', label:'Conceptos clave', count:w.concepts.length},
+    {key:'examples', label:'Ejemplos aplicados', count:w.examples.length},
+    {key:'exercises', label:'Ejercicios', count:w.exercises.length},
+    {key:'icfes', label:'Reto ICFES', count:w.icfes.length},
+  ];
+  if(w.similarity) subs.push({key:'similarity', label:'Semejanza de triángulos', count:w.similarity.exercises.length});
+  if(w.equations) subs.push({key:'equations', label:'Evaluador de ecuaciones', count:w.equations.length});
+  return `
+  <section class="panel" id="panel-${w.id}" role="tabpanel" aria-labelledby="tabbtn-${w.id}">
+    <div class="panel-head">
+      <div>
+        <h2>${w.title} · ${w.theme.split(' · ')[1]}</h2>
+        <div class="theme">${w.theme}</div>
+      </div>
+      <div class="week-progress-pill" id="pill-${w.id}">0 / 0 completado</div>
+    </div>
+    <div class="goal-strip"><b>Objetivo de la semana:</b> ${w.objective}</div>
+
+    <div class="subnav" role="tablist" aria-label="Secciones de ${w.title}">
+      ${subs.map((s,i)=>`<button class="subtab" role="tab" aria-selected="${i===0}" data-week="${w.id}" data-sub="${s.key}">${s.label} <span class="count">${s.count}</span></button>`).join('')}
+    </div>
+
+    <div class="subpanel active" data-week="${w.id}" data-sub="concepts">
+      ${w.concepts.map(c=>renderConceptExample(c,'concept')).join('')}
+    </div>
+    <div class="subpanel" data-week="${w.id}" data-sub="examples">
+      ${w.examples.map(c=>renderConceptExample(c,'example')).join('')}
+    </div>
+    <div class="subpanel" data-week="${w.id}" data-sub="exercises">
+      ${renderExercisesBlock(w)}
+    </div>
+    <div class="subpanel" data-week="${w.id}" data-sub="icfes">
+      ${w.icfes.map((q,i)=>renderIcfes(w.id,q,i)).join('')}
+      ${w.id==='s4' ? `<div class="finaltips"><h4>Consejos finales para el día de la prueba</h4><ul>${FINAL_TIPS.map(t=>`<li>${t}</li>`).join('')}</ul></div>` : ''}
+    </div>
+    ${w.similarity ? `<div class="subpanel" data-week="${w.id}" data-sub="similarity">${renderSimilarityPanel(w)}</div>` : ''}
+    ${w.equations ? `<div class="subpanel" data-week="${w.id}" data-sub="equations">${renderEqChecker(w.id, w.equations)}</div>` : ''}
+  </section>`;
+}
+
+function renderOverview(){
+  return `
+  <section class="panel active" id="panel-overview" role="tabpanel" aria-labelledby="tabbtn-overview">
+    <div class="panel-head">
+      <div><h2>¡Hola! Esta es tu bitácora de estudio</h2><div class="theme">4 semanas · 2 ejes temáticos</div></div>
+    </div>
+
+    <div class="block concept" style="border-left-color:var(--mustard-deep);">
+      <h4>📖 ¿Qué es esto y cómo lo uso?</h4>
+      <p style="font-size:14px;">Aquí tienes organizado todo lo que necesitas para prepararte para la prueba Saber, en un solo lugar. Así funciona:</p>
+      <ul style="font-size:13.8px; margin:6px 0 4px 18px; padding:0;">
+        <li style="margin-bottom:6px;">Arriba, en la barra azul, elige la <b>semana</b> en la que estás trabajando (1, 2, 3 o 4).</li>
+        <li style="margin-bottom:6px;">Dentro de cada semana hay pestañas más pequeñas: <b>Conceptos clave</b> (la teoría explicada fácil), <b>Ejemplos aplicados</b> (casos de la vida real), <b>Ejercicios</b> (para practicar) y <b>Reto ICFES</b> (preguntas como las de la prueba). Las semanas 2, 3 y 4 tienen además pestañas extra: un <b>Evaluador de ecuaciones</b> y una sección de <b>Semejanza de triángulos</b>.</li>
+        <li style="margin-bottom:6px;">Al final de la barra de navegación hay una pestaña morada especial, <b>Ecuaciones algebraicas</b>: ahí encuentras la teoría pura de cómo resolver ecuaciones (jerarquía de signos, orden de las operaciones y el proceso paso a paso), con 16 ejercicios organizados en 4 niveles de dificultad, cada uno con pista y solución paso a paso para que practiques a tu ritmo.</li>
+        <li style="margin-bottom:6px;">En <b>Ejercicios</b>, marca la casilla ✅ cuando termines cada uno. Si te trabas, haz clic en <span class="mono">💡 Ver pista</span>.</li>
+        <li style="margin-bottom:6px;">En <b>Reto ICFES</b>, haz clic en la opción que creas correcta: al instante te dice si acertaste y te explica por qué.</li>
+        <li style="margin-bottom:6px;">En el <b>Evaluador de ecuaciones</b>, escribe un valor y comprueba tú misma si resuelve la ecuación correctamente.</li>
+        <li>Arriba de todo, la barra amarilla muestra tu avance total. <b>Todo se guarda solo en este navegador:</b> puedes cerrar la página y volver después, y seguirá marcado como lo dejaste. Nada se sube a internet ni se comparte con nadie. Si quieres empezar de nuevo, usa el botón «Reiniciar avance» al final de la página.</li>
+      </ul>
+      <details class="hint" style="margin-top:8px;"><summary>Nota para docentes: cómo publicar esta página</summary>
+        <p>Este archivo es una sola página web (HTML) que no necesita instalación ni servidor. Para compartirla gratis en internet, súbelo a un repositorio de GitHub y activa GitHub Pages (Settings → Pages → Deploy from branch → rama principal, carpeta raíz «/»); quedará disponible en una dirección como <span class="mono">https://usuario.github.io/repositorio/</span>. También puedes simplemente enviar el archivo por correo o WhatsApp: se abre con doble clic en cualquier navegador, sin necesidad de internet.</p>
+      </details>
+    </div>
+
+    <div class="cards2">
+      <div class="axis-card alg"><h3>📐 Eje numérico-variacional</h3><p>Lenguaje algebraico: traducción, modelación de ecuaciones y solución de situaciones cotidianas.</p></div>
+      <div class="axis-card geo"><h3>△ Eje geométrico-métrico</h3><p>Congruencia (LAL, ALA, LLL) y semejanza de triángulos, aplicadas a diseño y arquitectura.</p></div>
+    </div>
+    <table class="crono-table">
+      <tr><th>Semana</th><th>Objetivo</th><th>Tema</th><th>Actividad principal</th></tr>
+      ${WEEKS.filter(w=>w.isWeek!==false).map(w=>`<tr><td class="wk">${w.num}</td><td>${w.objective}</td><td>${w.theme}</td><td>${w.examples[0].h}</td></tr>`).join('')}
+    </table>
+    <p style="font-size:13px; color:var(--graphite); margin-top:10px;">💡 Además de las 4 semanas, en la pestaña <b>Ecuaciones algebraicas</b> (al final de la barra de arriba) encuentras la teoría completa de cómo resolver ecuaciones, con práctica de nivel básico a avanzado.</p>
+  </section>`;
+}
+
+function buildContent(){
+  mainContent.innerHTML = renderOverview() + WEEKS.map(renderWeekPanel).join('');
+}
+
+/* Add an "Inicio" tab manually into nav */
+function addOverviewTab(){
+  const btn = document.createElement('button');
+  btn.className = 'weektab';
+  btn.setAttribute('role','tab');
+  btn.id = 'tabbtn-overview';
+  btn.setAttribute('aria-selected','true');
+  btn.setAttribute('aria-controls','panel-overview');
+  btn.dataset.target = 'overview';
+  btn.innerHTML = `<span class="num mono">GUÍA</span><span class="ttl">Inicio</span><span class="chip">cronograma</span>`;
+  weekNav.querySelector('.wrap').prepend(btn);
+  btn.addEventListener('click', ()=> activateWeek('overview'));
+}
+
+/* =========================================================
+   TAB LOGIC
+========================================================= */
+function activateWeek(id){
+  document.querySelectorAll('.weektab').forEach(b=>b.setAttribute('aria-selected', b.dataset.target===id));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id===`panel-${id}`));
+}
+
+function activateSub(weekId, subKey){
+  document.querySelectorAll(`.subtab[data-week="${weekId}"]`).forEach(b=>b.setAttribute('aria-selected', b.dataset.sub===subKey));
+  document.querySelectorAll(`.subpanel[data-week="${weekId}"]`).forEach(p=>p.classList.toggle('active', p.dataset.sub===subKey));
+}
+
+function wireSubtabs(){
+  document.querySelectorAll('.subtab').forEach(btn=>{
+    btn.addEventListener('click', ()=> activateSub(btn.dataset.week, btn.dataset.sub));
+  });
+}
+
+/* =========================================================
+   EXERCISES + ICFES INTERACTIVITY
+========================================================= */
+function wireExercises(){
+  document.querySelectorAll('.exercise input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      state.ex[cb.dataset.id] = cb.checked;
+      document.getElementById(`wrap-${cb.dataset.id}`).classList.toggle('done', cb.checked);
+      saveState();
+      updateProgress();
+    });
+  });
+}
+
+function wireIcfes(){
+  WEEKS.forEach(w=>{
+    w.icfes.forEach((q,idx)=>{
+      const id = `${w.id}-icfes-${idx}`;
+      const container = document.getElementById(`opts-${id}`);
+      if(!container) return;
+      // Restore saved state
+      if(state.icfes[id] !== undefined){
+        paintIcfesResult(id, q, state.icfes[id]);
+      }
+      container.querySelectorAll('.opt').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          if(state.icfes[id] !== undefined) return;
+          const chosen = parseInt(btn.dataset.idx,10);
+          state.icfes[id] = chosen;
+          saveState();
+          paintIcfesResult(id, q, chosen);
+          updateProgress();
+        });
+      });
+    });
+  });
+}
+
+function paintIcfesResult(id, q, chosenIdx){
+  const container = document.getElementById(`opts-${id}`);
+  if(!container) return;
+  container.querySelectorAll('.opt').forEach(btn=>{
+    const i = parseInt(btn.dataset.idx,10);
+    btn.disabled = true;
+    if(i === q.correct) btn.classList.add('correct');
+    else if(i === chosenIdx) btn.classList.add('incorrect');
+  });
+  document.getElementById(`just-${id}`).classList.add('show');
+  const status = document.getElementById(`status-${id}`);
+  status.textContent = chosenIdx === q.correct ? "✔ Respondiste correctamente." : "✘ Respuesta incorrecta — revisa la justificación.";
+  status.style.color = chosenIdx === q.correct ? "var(--leaf)" : "var(--brick)";
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+function updateProgress(){
+  let totalAll = 0, doneAll = 0;
+  WEEKS.forEach(w=>{
+    const simCount = w.similarity ? w.similarity.exercises.length : 0;
+    const totalWeek = w.exercises.length + w.icfes.length + simCount;
+    let doneWeek = 0;
+    w.exercises.forEach((_,i)=>{ if(state.ex[`${w.id}-ex-${i}`]) doneWeek++; });
+    w.icfes.forEach((_,i)=>{ if(state.icfes[`${w.id}-icfes-${i}`] !== undefined) doneWeek++; });
+    if(w.similarity) w.similarity.exercises.forEach((_,i)=>{ if(state.ex[`${w.id}-sim-ex-${i}`]) doneWeek++; });
+    totalAll += totalWeek; doneAll += doneWeek;
+    const pill = document.getElementById(`pill-${w.id}`);
+    if(pill) pill.textContent = `${doneWeek} / ${totalWeek} completado`;
+  });
+  const pct = totalAll ? Math.round((doneAll/totalAll)*100) : 0;
+  document.getElementById('overallFill').style.width = pct+'%';
+  document.getElementById('overallPct').textContent = pct+'%';
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+function wireAllEqCheckers(){
+  WEEKS.forEach(w=>{ if(w.equations) wireEqChecker(w.id, w.equations); });
+}
+
+buildNav();
+addOverviewTab();
+buildContent();
+wireSubtabs();
+wireExercises();
+wireIcfes();
+wireAllEqCheckers();
+updateProgress();
+
+document.getElementById('resetProgress').addEventListener('click', ()=>{
+  if(confirm('¿Reiniciar todo tu avance guardado en este navegador?')){
+    localStorage.removeItem(STORE_KEY);
+    state = {ex:{}, icfes:{}};
+    buildContent();
+    wireSubtabs();
+    wireExercises();
+    wireIcfes();
+    wireAllEqCheckers();
+    updateProgress();
+    activateWeek('overview');
+  }
+});
+</script>
+</body>
+</html>
