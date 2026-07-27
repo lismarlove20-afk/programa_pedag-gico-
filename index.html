@@ -262,6 +262,9 @@ main{padding:34px 0 70px 0;}
 .hint p{
   margin:6px 0 0 0; font-size:13px; color:var(--graphite); background:#FFF7E8; border-radius:6px; padding:8px 10px;
 }
+.hint.solution summary{color:var(--blueprint);}
+.hint.solution summary::before{content:"✅ ";}
+.hint.solution p{background:var(--blueprint-tint); color:var(--ink);}
 
 /* ICFES quiz */
 .icfes{
@@ -378,7 +381,7 @@ footer.site a{color:var(--blueprint);}
 ========================================================= */
 const WEEKS = [
 {
-  id:"s1", num:"01", title:"Semana 1", theme:"Lenguaje algebraico I · Traducción", axis:"alg",
+  id:"s1", num:"01", navLabel:"SEMANA 01", isWeek:true, title:"Semana 1", theme:"Lenguaje algebraico I · Traducción", axis:"alg",
   objective:"Traducir situaciones cotidianas a expresiones algebraicas, e interpretar expresiones algebraicas en lenguaje natural.",
   concepts:[
     {h:"¿Qué es el lenguaje algebraico?", body:"<p>El <b>lenguaje algebraico</b> representa cantidades y relaciones usando letras (<i>variables</i>), números y operaciones. Una variable representa un valor que puede cambiar o que aún no conocemos.</p>"},
@@ -410,7 +413,7 @@ const WEEKS = [
   ]
 },
 {
-  id:"s2", num:"02", title:"Semana 2", theme:"Lenguaje algebraico II · Ecuaciones", axis:"alg",
+  id:"s2", num:"02", navLabel:"SEMANA 02", isWeek:true, title:"Semana 2", theme:"Lenguaje algebraico II · Ecuaciones", axis:"alg",
   objective:"Plantear ecuaciones sencillas a partir de situaciones reales y resolverlas para encontrar el valor de la incógnita.",
   concepts:[
     {h:"¿Qué es una ecuación?", body:"<p>Una <b>ecuación</b> es una igualdad entre dos expresiones que contiene una o más incógnitas. Resolverla es encontrar el valor que hace verdadera esa igualdad.</p>"},
@@ -439,10 +442,17 @@ const WEEKS = [
     {stem:"Un vendedor de arepas gana $700 por cada arepa vendida, pero debe pagar $15.000 diarios de arriendo del puesto. Si un día ganó una utilidad neta de $27.000, ¿cuántas arepas vendió?",
      options:["40","42","60","64"], correct:2,
      just:"La ecuación es 700x − 15.000 = 27.000. Sumando 15.000: 700x = 42.000. Dividiendo entre 700: x = 60."}
+  ],
+  equations:[
+    {label:"3.000 + 1.500x = 10.500  (parqueadero)", a:1500, b:3000, c:0, d:10500},
+    {label:"x + (x + 6) = 34  (edades de las primas)", a:2, b:6, c:0, d:34},
+    {label:"60.000 + 35.000x = 340.000  (plan de gimnasio)", a:35000, b:60000, c:0, d:340000},
+    {label:"2(x − 3) = 16", a:2, b:-6, c:0, d:16},
+    {label:"900x + 2.000 = 23.600  (mangos de la frutera)", a:900, b:2000, c:0, d:23600}
   ]
 },
 {
-  id:"s3", num:"03", title:"Semana 3", theme:"Congruencia de triángulos · Criterios", axis:"geo",
+  id:"s3", num:"03", navLabel:"SEMANA 03", isWeek:true, title:"Semana 3", theme:"Congruencia y semejanza de triángulos", axis:"geo",
   objective:"Reconocer, mediante la observación de figuras, cuándo dos triángulos son congruentes, usando los criterios LAL, ALA y LLL.",
   concepts:[
     {h:"¿Qué significa ser congruentes?", body:"<p>Dos figuras son <b>congruentes</b> cuando tienen exactamente la misma forma y el mismo tamaño: si recortaras una y la pusieras sobre la otra, coincidirían perfectamente (aunque estén giradas o volteadas).</p>"},
@@ -471,10 +481,32 @@ const WEEKS = [
     {stem:"En dos triángulos, dos ángulos correspondientes son iguales (40° y 75°), pero el lado conocido igual <i>no</i> está ubicado entre esos dos ángulos, sino opuesto a uno de ellos. ¿Qué puede afirmarse?",
      options:["Son congruentes por ALA, sin importar la posición del lado","Son congruentes por LAL, porque hay un lado y dos ángulos","Podrían ser congruentes por otro criterio (AAL), pero no se cumple ALA tal como está definido","Nunca pueden ser congruentes en ese caso"], correct:2,
      just:"El criterio ALA exige que el lado esté comprendido entre los dos ángulos. Si el lado es opuesto a uno de ellos, no se cumple ALA como tal (aunque exista un criterio relacionado, AAL, la pregunta evalúa el reconocimiento preciso de ALA)."}
-  ]
+  ],
+  similarity:{
+    concepts:[
+      {h:"¿Qué es la semejanza de triángulos?", body:"<p>Dos triángulos son <b>semejantes</b> cuando tienen exactamente la misma forma, aunque no necesariamente el mismo tamaño: es como una foto original y una copia ampliada o reducida, o como un mapa y el territorio real. Para que dos triángulos sean semejantes deben cumplirse <b>las dos condiciones a la vez</b>:</p><ul style='margin:6px 0 0 18px; padding:0;'><li style='margin-bottom:4px;'>Sus <b>ángulos correspondientes son iguales</b> (ángulo por ángulo).</li><li>Sus <b>lados correspondientes son proporcionales</b>: no tienen que medir lo mismo, pero deben guardar siempre la misma razón entre sí.</li></ul><p style='margin-top:8px;'><b>La diferencia clave con la congruencia:</b> la <b>congruencia</b> exige misma forma <i>y</i> mismo tamaño (los lados son exactamente iguales); la <b>semejanza</b> solo exige misma forma (los lados son proporcionales, no necesariamente iguales). Por eso, todo par de triángulos congruentes también es semejante (con razón 1:1), pero no todo par de triángulos semejantes es congruente.</p>"},
+      {h:"La razón (o escala) de semejanza", body:"<p>Cuando dos triángulos son semejantes, existe un número fijo <b>k</b>, llamado <b>razón de semejanza</b> (o escala), tal que cada lado de un triángulo es igual a k veces el lado correspondiente del otro.</p><div class='formula'>lado del triángulo grande = k × lado correspondiente del triángulo pequeño</div><p><b>Ejemplo numérico:</b> si un triángulo tiene lados 3 cm, 4 cm y 5 cm, y otro semejante a él tiene lados 6 cm, 8 cm y 10 cm, entonces: 6÷3 = 2, 8÷4 = 2, 10÷5 = 2. Las tres razones dan el mismo número, <b>k = 2</b>: el segundo triángulo es exactamente el doble del primero, conservando su forma.</p><p>Si al dividir los lados correspondientes obtienes razones <i>distintas</i>, los triángulos <b>no</b> son semejantes, aunque se parezcan a simple vista.</p>"},
+      {h:"Los tres criterios de semejanza: AA, LAL~ y LLL~", body:"<p>Al igual que con la congruencia, no es necesario comprobar los tres ángulos y los tres lados: basta con verificar uno de estos tres criterios.</p><ul style='margin:6px 0 10px 18px; padding:0;'><li style='margin-bottom:8px;'><b>AA (Ángulo–Ángulo):</b> si dos ángulos de un triángulo son iguales a dos ángulos de otro, los triángulos ya son semejantes. (El tercer ángulo queda determinado solo, porque los tres ángulos internos de cualquier triángulo siempre suman 180°). Es el criterio más rápido de usar.</li><li style='margin-bottom:8px;'><b>LAL~ (Lado–Ángulo–Lado, versión de semejanza):</b> si dos lados de un triángulo son <i>proporcionales</i> a dos lados de otro (misma razón k), y el ángulo <i>comprendido</i> entre esos lados es igual en ambos, los triángulos son semejantes.</li><li><b>LLL~ (Lado–Lado–Lado, versión de semejanza):</b> si los tres lados de un triángulo son proporcionales a los tres lados de otro (las tres razones dan el mismo número k), los triángulos son semejantes — sin necesidad de medir ningún ángulo.</li></ul><p><b>No los confundas con los criterios de congruencia</b> (LAL, ALA, LLL): en congruencia los elementos deben ser <i>exactamente iguales</i>; en semejanza, los lados solo deben ser <i>proporcionales</i> (guardar la misma razón), mientras que los ángulos sí deben seguir siendo exactamente iguales en ambos casos.</p>"},
+      {h:"Cómo resolver un problema de semejanza, paso a paso", body:"<p>Cuando te pidan hallar una medida desconocida usando semejanza, sigue siempre esta ruta:</p><ol style='margin:6px 0 0 18px; padding:0;'><li style='margin-bottom:4px;'>Identifica los dos triángulos semejantes y confirma el criterio (AA, LAL~ o LLL~).</li><li style='margin-bottom:4px;'>Empareja los lados <i>correspondientes</i> (el lado grande de uno con su pareja en el otro).</li><li style='margin-bottom:4px;'>Plantea una <b>proporción</b>: lado conocido₁ / lado conocido₂ = lado conocido₃ / lado desconocido.</li><li style='margin-bottom:4px;'>Resuelve por <b>multiplicación cruzada</b> (el producto de los extremos es igual al producto de los medios).</li><li>Verifica que el resultado tenga sentido con el contexto (unidades correctas, magnitud razonable).</li></ol>"}
+    ],
+    examples:[
+      {h:"Medir un árbol con su sombra (sin subirte a él)", body:"<p>Una estudiante de 1,6 m de estatura proyecta una sombra de 2 m al mismo tiempo que un árbol cercano proyecta una sombra de 9 m. Como el sol forma el mismo ángulo sobre ambos objetos y los dos forman un ángulo recto con el suelo, los dos triángulos (estudiante–sombra y árbol–sombra) comparten dos ángulos iguales: son semejantes por <b>AA</b>. Entonces sus lados correspondientes son proporcionales:</p><div class='formula'>altura árbol / 1,6 = 9 / 2</div><p>altura árbol = 1,6 × (9 ÷ 2) = <b>7,2 m</b>. Así, sin instrumentos costosos, se puede calcular la altura de algo muy grande usando solo una sombra y una regla.</p>"},
+      {h:"Verificar la semejanza paso a paso (criterio LLL~)", body:"<p>Dos piezas triangulares de un techo tienen estas medidas: la primera, 4 m, 6 m y 8 m; la segunda, 6 m, 9 m y 12 m. ¿Son semejantes?</p><div class='formula'>6 ÷ 4 = 1,5 &nbsp;&nbsp;·&nbsp;&nbsp; 9 ÷ 6 = 1,5 &nbsp;&nbsp;·&nbsp;&nbsp; 12 ÷ 8 = 1,5</div><p>Las tres razones dan exactamente el mismo número (k = 1,5), así que sí son semejantes por <b>LLL~</b>, con razón de semejanza 1,5 (la pieza grande es una vez y media la pequeña). Si aunque sea una sola razón hubiera dado diferente, ya no serían semejantes.</p>"}
+    ],
+    exercises:[
+      {t:"Un triángulo tiene ángulos de 50° y 70°. Otro triángulo tiene ángulos de 50° y 60°. ¿Son semejantes? Justifica usando el criterio AA.", tags:["raz"], hint:"Recuerda que los tres ángulos internos de un triángulo siempre suman 180°: calcula el tercer ángulo de cada uno antes de comparar.", solution:"Tercer ángulo del primero: 180° − 50° − 70° = 60°. Tercer ángulo del segundo: 180° − 50° − 60° = 70°. Ambos triángulos tienen los mismos tres ángulos (50°, 60°, 70°), así que <b>sí son semejantes por AA</b> (con solo dos ángulos iguales ya bastaba)."},
+      {t:"El triángulo A tiene lados 5 cm, 7 cm y 9 cm. El triángulo B tiene lados 10 cm, 14 cm y 18 cm. ¿Son semejantes? Si lo son, ¿cuál es la razón de semejanza?", tags:["raz","mod"], hint:"Divide cada lado de B entre su lado correspondiente en A, y compara las tres razones obtenidas.", solution:"10÷5 = 2, 14÷7 = 2, 18÷9 = 2. Las tres razones son iguales, así que <b>sí son semejantes por LLL~</b>, con razón de semejanza <b>k = 2</b> (B es el doble de A)."},
+      {t:"Dos triángulos comparten un ángulo de 40°. En uno, los lados que forman ese ángulo miden 6 cm y 9 cm; en el otro, 8 cm y 12 cm. ¿Son semejantes por LAL~?", tags:["raz"], hint:"Compara la razón entre cada par de lados que rodean el ángulo igual (8÷6 y 12÷9).", solution:"8÷6 = 4/3 y 12÷9 = 4/3: las razones coinciden, y el ángulo comprendido es igual (40°) en ambos triángulos. <b>Sí son semejantes por LAL~</b>, con razón de semejanza 4/3."},
+      {t:"Una escalera pequeña, apoyada contra una pared, mide 2 m de largo y alcanza 1,6 m de altura en la pared. Una escalera más grande, con la misma inclinación, mide 5 m de largo. Suponiendo que forman triángulos semejantes, ¿a qué altura llegará en la pared?", tags:["mod","raz"], hint:"Plantea una proporción entre altura y largo: la razón altura/largo debe ser la misma en los dos triángulos.", solution:"1,6/2 = h/5 → h = (1,6 × 5) ÷ 2 = <b>4 m</b>."},
+      {t:"Una fotografía triangular decorativa mide 8 cm de base y 6 cm de altura. Se manda a ampliar conservando la misma proporción (semejanza), y la nueva base mide 20 cm. ¿Cuál será la nueva altura?", tags:["mod"], hint:"Primero halla la razón de semejanza comparando las dos bases; luego aplícala a la altura.", solution:"Razón de semejanza: 20÷8 = 2,5. Nueva altura = 6 × 2,5 = <b>15 cm</b>."},
+      {t:"A las 3 de la tarde, un poste de 3 m de altura proyecta una sombra de 4 m. En ese mismo instante, un edificio cercano proyecta una sombra de 24 m. ¿Cuál es la altura del edificio?", tags:["mod","raz"], hint:"La razón altura/sombra debe ser igual en los dos triángulos semejantes formados por el sol.", solution:"3/4 = h/24 → h = (3 × 24) ÷ 4 = <b>18 m</b>."},
+      {t:"Un triángulo tiene lados 4 cm, 5 cm y 6 cm; otro triángulo (rotado) tiene también 4 cm, 5 cm y 6 cm; un tercer triángulo tiene lados 8 cm, 10 cm y 12 cm. ¿Cuáles pares son congruentes y cuáles son solo semejantes? Explica la diferencia con tus palabras.", tags:["com","raz"], hint:"Congruentes = misma forma y mismo tamaño (lados exactamente iguales). Semejantes = misma forma, tamaños proporcionales.", solution:"El primer y segundo triángulo son <b>congruentes</b> por LLL (tienen exactamente los mismos tres lados). Cualquiera de esos dos, comparado con el tercero, es <b>semejante</b> por LLL~ con razón 2 (8/4 = 10/5 = 12/6 = 2), pero no son congruentes entre sí porque sus tamaños son distintos."},
+      {t:"Dibuja en tu cuaderno dos triángulos semejantes que NO sean congruentes entre sí. Indica las medidas que usaste, el criterio de semejanza que se cumple (AA, LAL~ o LLL~) y la razón de semejanza entre ambos.", tags:["com","mod"], hint:"Elige un triángulo con medidas sencillas (por ejemplo, 3 cm, 4 cm y 5 cm) y multiplica todos sus lados por el mismo número para crear el segundo triángulo."}
+    ]
+  }
 },
 {
-  id:"s4", num:"04", title:"Semana 4", theme:"Integración final · Simulacro", axis:"mix",
+  id:"s4", num:"04", navLabel:"SEMANA 04", isWeek:true, title:"Semana 4", theme:"Integración final · Simulacro", axis:"mix",
   objective:"Combinar el lenguaje algebraico y la congruencia de triángulos para justificar diseños reales, y afianzar el razonamiento con un simulacro final.",
   concepts:[
     {h:"Álgebra + geometría, de la mano", body:"<p>En muchos problemas de las Pruebas Saber, primero se plantea una ecuación para hallar una medida desconocida (un lado o un ángulo) y luego se usa esa medida para argumentar la congruencia entre figuras.</p>"},
@@ -504,6 +536,67 @@ const WEEKS = [
     {stem:"Un puente peatonal usa dos triángulos congruentes por LAL: comparten un ángulo de 90° entre lados de (3x+2) m y 10 m en el primero, y de 20 m y 10 m en el segundo. ¿Cuál es el valor de x para que los triángulos sean congruentes?",
      options:["x = 4","x = 6","x = 9","x = 12"], correct:1,
      just:"Para que LAL se cumpla, el lado variable debe igualar al lado correspondiente conocido: 3x+2 = 20 → 3x = 18 → x = 6."}
+  ],
+  equations:[
+    {label:"4x − 3 = 2x + 7  (escalera)", a:4, b:-3, c:2, d:7},
+    {label:"5x − 6 = 3x + 4  (ventanas)", a:5, b:-6, c:3, d:4},
+    {label:"50.000 + 18.000x = 140.000  (logotipo)", a:18000, b:50000, c:0, d:140000},
+    {label:"6x − 9 = 4x + 3  (cometa)", a:6, b:-9, c:4, d:3}
+  ]
+},
+{
+  id:"eq", num:"EX", navLabel:"TEMA EXTRA", isWeek:false, title:"Ecuaciones algebraicas", theme:"Ecuaciones algebraicas · Teoría y práctica guiada", axis:"eq",
+  objective:"Entender la jerarquía de signos y el proceso paso a paso para resolver ecuaciones, y practicar desde casos sencillos hasta ecuaciones más complejas.",
+  concepts:[
+    {h:"La jerarquía de signos: reglas para sumar, restar, multiplicar y dividir", body:"<p>Antes de resolver cualquier ecuación necesitas tener muy claras estas reglas. No te las aprendas de memoria sin entenderlas: practícalas hasta que te salgan solas.</p><p><b>Para sumar y restar (signos iguales o distintos):</b></p><ul style='margin:6px 0 10px 18px; padding:0;'><li style='margin-bottom:4px;'>Si los signos son <b>iguales</b>, se suman los números y se deja ese mismo signo. Ej: 5 + 3 = 8 &nbsp;·&nbsp; (−5) + (−3) = −8</li><li>Si los signos son <b>distintos</b>, se resta el número menor al mayor, y el resultado lleva el signo del número más grande (en valor absoluto). Ej: (−5) + 3 = −2 &nbsp;·&nbsp; 5 + (−3) = 2 &nbsp;·&nbsp; 5 − 8 = −3</li></ul><p><b>Para multiplicar y dividir:</b></p><ul style='margin:6px 0 0 18px; padding:0;'><li style='margin-bottom:4px;'><b>Signos iguales → resultado positivo.</b> Ej: (−4) × (−3) = 12 &nbsp;·&nbsp; (−12) ÷ (−4) = 3</li><li><b>Signos distintos → resultado negativo.</b> Ej: (−4) × 3 = −12 &nbsp;·&nbsp; 12 ÷ (−4) = −3</li></ul>"},
+    {h:"La jerarquía de operaciones: ¿en qué orden se resuelve todo?", body:"<p>Cuando una expresión tiene varias operaciones mezcladas, no se resuelven de izquierda a derecha sin pensar: hay un orden obligatorio.</p><ol style='margin:6px 0 10px 18px; padding:0;'><li style='margin-bottom:4px;'>Primero, lo que está dentro de <b>paréntesis, corchetes o llaves</b>.</li><li style='margin-bottom:4px;'>Luego, <b>potencias y raíces</b>.</li><li style='margin-bottom:4px;'>Después, <b>multiplicaciones y divisiones</b>, en el orden en que aparecen (de izquierda a derecha).</li><li><b>Al final, sumas y restas</b>, también de izquierda a derecha.</li></ol><p><b>Ejemplo:</b> resolvamos 4 + 2 × (6 − 3)²</p><div class='formula'>1) Paréntesis: (6−3) = 3<br>2) Potencia: 3² = 9<br>3) Multiplicación: 2 × 9 = 18<br>4) Suma: 4 + 18 = 22</div><p>Si sumaras 4+2 primero, ¡te daría un resultado totalmente distinto y equivocado! Por eso este orden es tan importante en una ecuación.</p>"},
+    {h:"¿Qué es exactamente «resolver» una ecuación?", body:"<p>Una ecuación es una balanza: lo que hay a la izquierda del signo = pesa exactamente lo mismo que lo de la derecha. <b>Resolverla</b> es encontrar el valor de la variable que mantiene esa balanza equilibrada.</p><p>La regla de oro: <b>todo lo que le hagas a un lado de la ecuación, se lo tienes que hacer también al otro lado</b> (sumar, restar, multiplicar o dividir por el mismo número en ambos lados), para que la balanza no se desequilibre.</p>"}
+  ],
+  examples:[
+    {h:"El proceso completo, paso a paso, con un ejemplo guiado", body:"<p>Vamos a resolver una ecuación con paréntesis y variable en un solo lado: <span class='mono'>3(x + 2) − 4 = 17</span></p><div class='formula'>Paso 1 — Resolver el paréntesis (distribuir):<br>3x + 6 − 4 = 17<br><br>Paso 2 — Reducir términos semejantes (los números sueltos):<br>3x + 2 = 17<br><br>Paso 3 — Pasar el número al otro lado (operación inversa: si suma, se resta):<br>3x = 17 − 2 → 3x = 15<br><br>Paso 4 — Despejar la variable (dividir entre el coeficiente):<br>x = 15 ÷ 3 → x = 5<br><br>Paso 5 — Verificar, reemplazando x = 5 en la ecuación ORIGINAL:<br>3(5 + 2) − 4 = 3(7) − 4 = 21 − 4 = 17 ✔</span></div><p>Siempre que termines un ejercicio, haz este último paso de verificación: es la forma más segura de saber si tu respuesta es correcta, sin depender de que alguien más te lo confirme.</p>"}
+  ],
+  groups:[
+    {label:"Nivel 1 · Ecuaciones de un solo paso", count:4},
+    {label:"Nivel 2 · Ecuaciones de dos pasos", count:4},
+    {label:"Nivel 3 · Con paréntesis y términos semejantes", count:4},
+    {label:"Nivel 4 · Variable en ambos lados (avanzadas)", count:4}
+  ],
+  exercises:[
+    {t:"Resuelve: <span class='mono'>x + 6 = 15</span>", tags:["raz"], hint:"Para despejar x, resta 6 en ambos lados.", solution:"x + 6 = 15 → x = 15 − 6 → <b>x = 9</b>. Verificación: 9 + 6 = 15 ✔"},
+    {t:"Resuelve: <span class='mono'>x − 8 = 3</span>", tags:["raz"], hint:"La operación inversa de restar es sumar.", solution:"x − 8 = 3 → x = 3 + 8 → <b>x = 11</b>. Verificación: 11 − 8 = 3 ✔"},
+    {t:"Resuelve: <span class='mono'>4x = 28</span>", tags:["raz"], hint:"Divide ambos lados entre 4.", solution:"4x = 28 → x = 28 ÷ 4 → <b>x = 7</b>. Verificación: 4(7) = 28 ✔"},
+    {t:"Resuelve: <span class='mono'>x ÷ 5 = 6</span>", tags:["raz"], hint:"La operación inversa de dividir es multiplicar.", solution:"x ÷ 5 = 6 → x = 6 × 5 → <b>x = 30</b>. Verificación: 30 ÷ 5 = 6 ✔"},
+    {t:"Resuelve: <span class='mono'>2x + 5 = 17</span>", tags:["raz"], hint:"Primero pasa el 5 al otro lado restando, y al final divide.", solution:"2x + 5 = 17 → 2x = 17 − 5 → 2x = 12 → <b>x = 6</b>. Verificación: 2(6)+5 = 17 ✔"},
+    {t:"Resuelve: <span class='mono'>5x − 3 = 27</span>", tags:["raz"], hint:"Pasa el −3 al otro lado sumando.", solution:"5x − 3 = 27 → 5x = 27 + 3 → 5x = 30 → <b>x = 6</b>. Verificación: 5(6)−3 = 27 ✔"},
+    {t:"Resuelve: <span class='mono'>−3x + 4 = −11</span>", tags:["raz"], hint:"Recuerda la jerarquía de signos al dividir por un número negativo.", solution:"−3x + 4 = −11 → −3x = −11 − 4 → −3x = −15 → x = (−15)÷(−3) → <b>x = 5</b> (signos iguales al dividir da positivo). Verificación: −3(5)+4 = −15+4 = −11 ✔"},
+    {t:"Resuelve: <span class='mono'>x ÷ 2 + 7 = 10</span>", tags:["raz"], hint:"Primero aísla el término con la x, luego multiplica.", solution:"x÷2 + 7 = 10 → x÷2 = 10 − 7 → x÷2 = 3 → x = 3 × 2 → <b>x = 6</b>. Verificación: 6÷2+7 = 3+7 = 10 ✔"},
+    {t:"Resuelve: <span class='mono'>3(x + 2) = 21</span>", tags:["raz","mod"], hint:"Puedes distribuir el 3, o dividir ambos lados entre 3 primero.", solution:"3(x+2) = 21 → x+2 = 21÷3 → x+2 = 7 → <b>x = 5</b>. Verificación: 3(5+2) = 3(7) = 21 ✔"},
+    {t:"Resuelve: <span class='mono'>2(x − 4) + 5 = 15</span>", tags:["raz","mod"], hint:"Distribuye primero el 2, luego reduce los números sueltos.", solution:"2(x−4)+5 = 15 → 2x−8+5 = 15 → 2x−3 = 15 → 2x = 18 → <b>x = 9</b>. Verificación: 2(9−4)+5 = 2(5)+5 = 15 ✔"},
+    {t:"Resuelve: <span class='mono'>4x + 2 − x = 17</span>", tags:["raz"], hint:"Antes de despejar, reduce los términos con x: 4x y −x son semejantes.", solution:"4x+2−x = 17 → 3x+2 = 17 → 3x = 15 → <b>x = 5</b>. Verificación: 4(5)+2−5 = 20+2−5 = 17 ✔"},
+    {t:"Resuelve: <span class='mono'>−2(x − 3) = 10</span>", tags:["raz","mod"], hint:"Al distribuir −2, cuidado con la jerarquía de signos: −2 × (−3) es positivo.", solution:"−2(x−3) = 10 → −2x + 6 = 10 → −2x = 4 → x = 4÷(−2) → <b>x = −2</b>. Verificación: −2(−2−3) = −2(−5) = 10 ✔"},
+    {t:"Resuelve: <span class='mono'>5x + 3 = 2x + 18</span>", tags:["raz","mod"], hint:"Pasa todos los términos con x a un lado y los números al otro.", solution:"5x+3 = 2x+18 → 5x−2x = 18−3 → 3x = 15 → <b>x = 5</b>. Verificación: 5(5)+3=28 y 2(5)+18=28 ✔"},
+    {t:"Resuelve: <span class='mono'>7x − 4 = 3x + 12</span>", tags:["raz","mod"], hint:"Agrupa las x de un lado y los números del otro, con cuidado en los signos.", solution:"7x−4 = 3x+12 → 7x−3x = 12+4 → 4x = 16 → <b>x = 4</b>. Verificación: 7(4)−4=24 y 3(4)+12=24 ✔"},
+    {t:"Resuelve: <span class='mono'>2(x + 3) = x + 10</span>", tags:["raz","mod"], hint:"Primero distribuye el 2 en el lado izquierdo, luego agrupa las x.", solution:"2(x+3) = x+10 → 2x+6 = x+10 → 2x−x = 10−6 → <b>x = 4</b>. Verificación: 2(4+3)=14 y 4+10=14 ✔"},
+    {t:"Resuelve: <span class='mono'>−4x + 5 = −2x − 3</span>", tags:["raz","mod"], hint:"Ten mucho cuidado con los signos al mover términos negativos de lugar.", solution:"−4x+5 = −2x−3 → −4x+2x = −3−5 → −2x = −8 → x = (−8)÷(−2) → <b>x = 4</b>. Verificación: −4(4)+5=−11 y −2(4)−3=−11 ✔"}
+  ],
+  icfes:[
+    {stem:"¿Cuál es el resultado de −8 + 3?",
+     options:["−11","−5","5","11"], correct:1,
+     just:"Los signos son distintos, así que se resta el menor al mayor (8−3=5) y el resultado lleva el signo del número con mayor valor absoluto (el −8), quedando −5."},
+    {stem:"Al resolver la expresión 5 + 2 × (7 − 4), ¿cuál operación se debe realizar primero?",
+     options:["Multiplicar 2 × 7","Restar 7 − 4, dentro del paréntesis","Sumar 5 + 2","Multiplicar 2 × 4"], correct:1,
+     just:"La jerarquía de operaciones indica que lo que está dentro de un paréntesis se resuelve siempre primero, antes de cualquier multiplicación o suma."},
+    {stem:"¿Cuál es el resultado de (−6) × (−2)?",
+     options:["−12","−8","8","12"], correct:3,
+     just:"Al multiplicar dos números con el mismo signo (negativo × negativo), el resultado es positivo: 6 × 2 = 12."}
+  ],
+  equations:[
+    {label:"x + 6 = 15", a:1, b:6, c:0, d:15},
+    {label:"2x + 5 = 17", a:2, b:5, c:0, d:17},
+    {label:"3(x + 2) = 21  →  3x + 6 = 21", a:3, b:6, c:0, d:21},
+    {label:"5x + 3 = 2x + 18", a:5, b:3, c:2, d:18},
+    {label:"7x − 4 = 3x + 12", a:7, b:-4, c:3, d:12},
+    {label:"−4x + 5 = −2x − 3", a:-4, b:5, c:-2, d:-3}
   ]
 }
 ];
@@ -538,13 +631,14 @@ const mainContent = document.getElementById('mainContent');
 function axisIcon(axis){
   if(axis==="geo") return `<svg class="icon" width="14" height="14" viewBox="0 0 20 20"><polygon points="10,2 18,18 2,18" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>`;
   if(axis==="mix") return `<svg class="icon" width="14" height="14" viewBox="0 0 20 20"><polygon points="10,2 18,18 2,18" fill="none" stroke="currentColor" stroke-width="1.4"/><text x="10" y="15" text-anchor="middle" font-size="7" fill="currentColor">x</text></svg>`;
+  if(axis==="eq") return `<svg class="icon" width="14" height="14" viewBox="0 0 20 20"><line x1="3" y1="8" x2="17" y2="8" stroke="currentColor" stroke-width="1.8"/><line x1="3" y1="13" x2="17" y2="13" stroke="currentColor" stroke-width="1.8"/></svg>`;
   return `<svg class="icon" width="14" height="14" viewBox="0 0 20 20"><text x="2" y="15" font-family="IBM Plex Mono" font-size="13" fill="currentColor">x</text></svg>`;
 }
 
 function buildNav(){
   weekNav.innerHTML = `<div class="wrap" style="display:flex;">${WEEKS.map((w,i)=>`
     <button class="weektab" role="tab" id="tabbtn-${w.id}" aria-selected="${i===0}" aria-controls="panel-${w.id}" data-target="${w.id}">
-      <span class="num mono">SEMANA ${w.num}</span>
+      <span class="num mono">${w.navLabel || w.id.toUpperCase()}</span>
       <span class="ttl">${w.theme.split(' · ')[0]}</span>
       <span class="chip">${w.theme.split(' · ')[1]}</span>
       ${axisIcon(w.axis)}
@@ -569,8 +663,22 @@ function renderExercise(weekId, ex, idx){
       <div class="tags">${ex.tags.map(t=>`<span class="tag ${t}">${TAG_LABEL[t]}</span>`).join('')}</div>
       <label class="ex-text" for="${id}"><b class="ex-num mono">${idx+1}.</b>${ex.t}</label>
       ${ex.hint ? `<details class="hint"><summary>Ver pista</summary><p>${ex.hint}</p></details>` : ''}
+      ${ex.solution ? `<details class="hint solution"><summary>Ver solución paso a paso</summary><p>${ex.solution}</p></details>` : ''}
     </div>
   </div>`;
+}
+
+function renderExercisesBlock(w){
+  if(!w.groups) return w.exercises.map((e,i)=>renderExercise(w.id,e,i)).join('');
+  let out=''; let offset=0;
+  w.groups.forEach(g=>{
+    out += `<h4 style="margin:20px 0 10px 0; color:var(--blueprint-deep); font-size:14px; border-bottom:1px dotted var(--line); padding-bottom:5px;">${g.label}</h4>`;
+    for(let i=0;i<g.count;i++){
+      out += renderExercise(w.id, w.exercises[offset+i], offset+i);
+    }
+    offset += g.count;
+  });
+  return out;
 }
 
 function renderIcfes(weekId, q, idx){
@@ -589,6 +697,61 @@ function renderIcfes(weekId, q, idx){
   </div>`;
 }
 
+function renderSimilarityPanel(w){
+  const s = w.similarity;
+  const concepts = s.concepts || (s.concept ? [s.concept] : []);
+  const examples = s.examples || (s.example ? [s.example] : []);
+  return `
+    ${concepts.map(c=>renderConceptExample(c,'concept')).join('')}
+    ${examples.map(c=>renderConceptExample(c,'example')).join('')}
+    ${s.exercises.map((e,i)=>renderExercise(w.id+'-sim', e, i)).join('')}
+  `;
+}
+
+function fmtSide(a,b){
+  const sign = b>=0 ? '+' : '−';
+  return `${a}×valor ${sign} ${Math.abs(b)}`;
+}
+
+function renderEqChecker(weekId, list){
+  return `
+  <div class="block concept" style="border-left-color:var(--mustard-deep);">
+    <h4>🧮 Comprobador de ecuaciones</h4>
+    <p style="font-size:13.5px;">Elige una de las ecuaciones que trabajaste esta semana, escribe el valor que crees que tiene la variable y pulsa <b>Evaluar</b>: la página calcula los dos lados de la ecuación y te dice si coinciden.</p>
+    <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:10px 0;">
+      <select id="eqSelect-${weekId}" style="font-family:'IBM Plex Mono'; font-size:12.5px; padding:7px 9px; border-radius:6px; border:1px solid var(--line); flex:1 1 260px;">
+        ${list.map((eq,i)=>`<option value="${i}">${eq.label}</option>`).join('')}
+      </select>
+      <input type="number" step="any" id="eqInput-${weekId}" placeholder="tu valor" style="font-family:'IBM Plex Mono'; font-size:13px; padding:7px 9px; border-radius:6px; border:1px solid var(--line); width:110px;">
+      <button id="eqBtn-${weekId}" type="button" style="background:var(--blueprint-deep); color:#fff; border:none; border-radius:6px; padding:8px 16px; cursor:pointer; font-family:var(--font-display); font-weight:600; font-size:13px;">Evaluar</button>
+    </div>
+    <div id="eqResult-${weekId}" class="mono" style="font-size:13px;"></div>
+  </div>`;
+}
+
+function wireEqChecker(weekId, list){
+  const btn = document.getElementById(`eqBtn-${weekId}`);
+  if(!btn) return;
+  btn.addEventListener('click', ()=>{
+    const idx = parseInt(document.getElementById(`eqSelect-${weekId}`).value,10);
+    const raw = document.getElementById(`eqInput-${weekId}`).value;
+    const result = document.getElementById(`eqResult-${weekId}`);
+    if(raw === ''){
+      result.innerHTML = `<span style="color:var(--brick);">Escribe primero un valor para probar.</span>`;
+      return;
+    }
+    const x = parseFloat(raw);
+    const eq = list[idx];
+    const lhs = eq.a*x + eq.b;
+    const rhs = eq.c*x + eq.d;
+    const ok = Math.abs(lhs-rhs) < 0.0001;
+    result.innerHTML = `Lado izquierdo: <b>${round2(lhs)}</b> &nbsp;|&nbsp; Lado derecho: <b>${round2(rhs)}</b><br>` +
+      (ok ? `<span style="color:var(--leaf);">✔ ¡Coinciden! Ese es el valor correcto de la variable.</span>`
+          : `<span style="color:var(--brick);">✘ No coinciden todavía. Vuelve a despejar con calma y prueba otro valor.</span>`);
+  });
+}
+function round2(n){ return Math.round(n*100)/100; }
+
 function renderWeekPanel(w){
   const subs = [
     {key:'concepts', label:'Conceptos clave', count:w.concepts.length},
@@ -596,6 +759,8 @@ function renderWeekPanel(w){
     {key:'exercises', label:'Ejercicios', count:w.exercises.length},
     {key:'icfes', label:'Reto ICFES', count:w.icfes.length},
   ];
+  if(w.similarity) subs.push({key:'similarity', label:'Semejanza de triángulos', count:w.similarity.exercises.length});
+  if(w.equations) subs.push({key:'equations', label:'Evaluador de ecuaciones', count:w.equations.length});
   return `
   <section class="panel" id="panel-${w.id}" role="tabpanel" aria-labelledby="tabbtn-${w.id}">
     <div class="panel-head">
@@ -618,12 +783,14 @@ function renderWeekPanel(w){
       ${w.examples.map(c=>renderConceptExample(c,'example')).join('')}
     </div>
     <div class="subpanel" data-week="${w.id}" data-sub="exercises">
-      ${w.exercises.map((e,i)=>renderExercise(w.id,e,i)).join('')}
+      ${renderExercisesBlock(w)}
     </div>
     <div class="subpanel" data-week="${w.id}" data-sub="icfes">
       ${w.icfes.map((q,i)=>renderIcfes(w.id,q,i)).join('')}
       ${w.id==='s4' ? `<div class="finaltips"><h4>Consejos finales para el día de la prueba</h4><ul>${FINAL_TIPS.map(t=>`<li>${t}</li>`).join('')}</ul></div>` : ''}
     </div>
+    ${w.similarity ? `<div class="subpanel" data-week="${w.id}" data-sub="similarity">${renderSimilarityPanel(w)}</div>` : ''}
+    ${w.equations ? `<div class="subpanel" data-week="${w.id}" data-sub="equations">${renderEqChecker(w.id, w.equations)}</div>` : ''}
   </section>`;
 }
 
@@ -631,17 +798,35 @@ function renderOverview(){
   return `
   <section class="panel active" id="panel-overview" role="tabpanel" aria-labelledby="tabbtn-overview">
     <div class="panel-head">
-      <div><h2>Cronograma general</h2><div class="theme">4 semanas · 2 ejes temáticos</div></div>
+      <div><h2>¡Hola! Esta es tu bitácora de estudio</h2><div class="theme">4 semanas · 2 ejes temáticos</div></div>
     </div>
+
+    <div class="block concept" style="border-left-color:var(--mustard-deep);">
+      <h4>📖 ¿Qué es esto y cómo lo uso?</h4>
+      <p style="font-size:14px;">Aquí tienes organizado todo lo que necesitas para prepararte para la prueba Saber, en un solo lugar. Así funciona:</p>
+      <ul style="font-size:13.8px; margin:6px 0 4px 18px; padding:0;">
+        <li style="margin-bottom:6px;">Arriba, en la barra azul, elige la <b>semana</b> en la que estás trabajando (1, 2, 3 o 4).</li>
+        <li style="margin-bottom:6px;">Dentro de cada semana hay pestañas más pequeñas: <b>Conceptos clave</b> (la teoría explicada fácil), <b>Ejemplos aplicados</b> (casos de la vida real), <b>Ejercicios</b> (para practicar) y <b>Reto ICFES</b> (preguntas como las de la prueba). Las semanas 2, 3 y 4 tienen además pestañas extra: un <b>Evaluador de ecuaciones</b> y una sección de <b>Semejanza de triángulos</b>.</li>
+        <li style="margin-bottom:6px;">Al final de la barra de navegación hay una pestaña morada especial, <b>Ecuaciones algebraicas</b>: ahí encuentras la teoría pura de cómo resolver ecuaciones (jerarquía de signos, orden de las operaciones y el proceso paso a paso), con 16 ejercicios organizados en 4 niveles de dificultad, cada uno con pista y solución paso a paso para que practiques a tu ritmo.</li>
+        <li style="margin-bottom:6px;">En <b>Ejercicios</b>, marca la casilla ✅ cuando termines cada uno. Si te trabas, haz clic en <span class="mono">💡 Ver pista</span>.</li>
+        <li style="margin-bottom:6px;">En <b>Reto ICFES</b>, haz clic en la opción que creas correcta: al instante te dice si acertaste y te explica por qué.</li>
+        <li style="margin-bottom:6px;">En el <b>Evaluador de ecuaciones</b>, escribe un valor y comprueba tú misma si resuelve la ecuación correctamente.</li>
+        <li>Arriba de todo, la barra amarilla muestra tu avance total. <b>Todo se guarda solo en este navegador:</b> puedes cerrar la página y volver después, y seguirá marcado como lo dejaste. Nada se sube a internet ni se comparte con nadie. Si quieres empezar de nuevo, usa el botón «Reiniciar avance» al final de la página.</li>
+      </ul>
+      <details class="hint" style="margin-top:8px;"><summary>Nota para docentes: cómo publicar esta página</summary>
+        <p>Este archivo es una sola página web (HTML) que no necesita instalación ni servidor. Para compartirla gratis en internet, súbelo a un repositorio de GitHub y activa GitHub Pages (Settings → Pages → Deploy from branch → rama principal, carpeta raíz «/»); quedará disponible en una dirección como <span class="mono">https://usuario.github.io/repositorio/</span>. También puedes simplemente enviar el archivo por correo o WhatsApp: se abre con doble clic en cualquier navegador, sin necesidad de internet.</p>
+      </details>
+    </div>
+
     <div class="cards2">
       <div class="axis-card alg"><h3>📐 Eje numérico-variacional</h3><p>Lenguaje algebraico: traducción, modelación de ecuaciones y solución de situaciones cotidianas.</p></div>
-      <div class="axis-card geo"><h3>△ Eje geométrico-métrico</h3><p>Criterios de congruencia de triángulos (LAL, ALA, LLL), aplicados a diseño y arquitectura.</p></div>
+      <div class="axis-card geo"><h3>△ Eje geométrico-métrico</h3><p>Congruencia (LAL, ALA, LLL) y semejanza de triángulos, aplicadas a diseño y arquitectura.</p></div>
     </div>
     <table class="crono-table">
       <tr><th>Semana</th><th>Objetivo</th><th>Tema</th><th>Actividad principal</th></tr>
-      ${WEEKS.map(w=>`<tr><td class="wk">${w.num}</td><td>${w.objective}</td><td>${w.theme}</td><td>${w.examples[0].h}</td></tr>`).join('')}
+      ${WEEKS.filter(w=>w.isWeek!==false).map(w=>`<tr><td class="wk">${w.num}</td><td>${w.objective}</td><td>${w.theme}</td><td>${w.examples[0].h}</td></tr>`).join('')}
     </table>
-    <p style="font-size:13px; color:var(--graphite);">Usa las pestañas de arriba para entrar a cada semana. Dentro de cada semana encontrarás cuatro secciones: <b>Conceptos clave</b>, <b>Ejemplos aplicados</b>, <b>Ejercicios</b> (con casillas de avance) y <b>Reto ICFES</b> (preguntas interactivas con justificación).</p>
+    <p style="font-size:13px; color:var(--graphite); margin-top:10px;">💡 Además de las 4 semanas, en la pestaña <b>Ecuaciones algebraicas</b> (al final de la barra de arriba) encuentras la teoría completa de cómo resolver ecuaciones, con práctica de nivel básico a avanzado.</p>
   </section>`;
 }
 
@@ -741,10 +926,12 @@ function paintIcfesResult(id, q, chosenIdx){
 function updateProgress(){
   let totalAll = 0, doneAll = 0;
   WEEKS.forEach(w=>{
-    const totalWeek = w.exercises.length + w.icfes.length;
+    const simCount = w.similarity ? w.similarity.exercises.length : 0;
+    const totalWeek = w.exercises.length + w.icfes.length + simCount;
     let doneWeek = 0;
     w.exercises.forEach((_,i)=>{ if(state.ex[`${w.id}-ex-${i}`]) doneWeek++; });
     w.icfes.forEach((_,i)=>{ if(state.icfes[`${w.id}-icfes-${i}`] !== undefined) doneWeek++; });
+    if(w.similarity) w.similarity.exercises.forEach((_,i)=>{ if(state.ex[`${w.id}-sim-ex-${i}`]) doneWeek++; });
     totalAll += totalWeek; doneAll += doneWeek;
     const pill = document.getElementById(`pill-${w.id}`);
     if(pill) pill.textContent = `${doneWeek} / ${totalWeek} completado`;
@@ -757,12 +944,17 @@ function updateProgress(){
 /* =========================================================
    INIT
 ========================================================= */
+function wireAllEqCheckers(){
+  WEEKS.forEach(w=>{ if(w.equations) wireEqChecker(w.id, w.equations); });
+}
+
 buildNav();
 addOverviewTab();
 buildContent();
 wireSubtabs();
 wireExercises();
 wireIcfes();
+wireAllEqCheckers();
 updateProgress();
 
 document.getElementById('resetProgress').addEventListener('click', ()=>{
@@ -773,6 +965,7 @@ document.getElementById('resetProgress').addEventListener('click', ()=>{
     wireSubtabs();
     wireExercises();
     wireIcfes();
+    wireAllEqCheckers();
     updateProgress();
     activateWeek('overview');
   }
@@ -780,3 +973,4 @@ document.getElementById('resetProgress').addEventListener('click', ()=>{
 </script>
 </body>
 </html>
+
